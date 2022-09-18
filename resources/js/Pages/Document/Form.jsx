@@ -1,19 +1,23 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, Head, useForm } from '@inertiajs/inertia-react'
 import { toast } from 'react-toastify'
 
-import {statuses} from '@/utils'
+import { statuses } from '@/utils'
+import { useModalState } from '@/Hooks'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import PrimaryButton from '@/Components/PrimaryButton'
 import InputLabel from '@/Components/InputLabel'
 import TextInput from '@/Components/TextInput'
 import InputError from '@/Components/InputError'
 import InputFile from '@/Components/InputFile'
-
+import ModalReminder from './ModalReminder'
+import { IconCross } from '@/Icons'
 
 export default function FormDocument(props) {
+    const inputDocument = useRef()
     const { types, departments, doc }= props
 
+    const [reminders, setReminders] = useState([])
     const { data, setData, post, processing, errors, reset } = useForm({
         no_doc: '',
         email: '',
@@ -29,10 +33,8 @@ export default function FormDocument(props) {
         document: null,
         document_name: '',
         status: 0,
-        reminder: ''
+        reminders: []
     });
-
-    const inputDocument = useRef()
 
     useEffect(() => {
         if(doc !== undefined) {
@@ -51,9 +53,23 @@ export default function FormDocument(props) {
                 document: null,
                 document_name: doc.document,
                 status: doc.status,
+                reminders: doc.reminders.map(r => r.date)
             })
+            setReminders(doc.reminders.map(r => r.date))
         }
     }, [doc]);
+
+    const reminderModal = useModalState(false)
+    const handleAddReminder = (date) => {
+        setReminders(reminders.concat(date))
+        setData('reminders', reminders.concat(date))
+    }
+
+    const handleRemoveReminder = (index) => {
+        const r = reminders.filter((_, i) => i !== index)
+        setReminders(r)
+        setData('reminders', r)
+    }
 
     const onHandleChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
@@ -72,6 +88,7 @@ export default function FormDocument(props) {
             onError: () => toast.error('please recheck the data')
         });
     };
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -259,17 +276,23 @@ export default function FormDocument(props) {
                                 <InputError message={errors.status}/>
                             </div>
                             <div className='mt-4'>
-                                <InputLabel forInput="reminder" value="Reminder" />
-                                <div className="btn-group w-full">
-                                    <TextInput
-                                        type="text"
-                                        name="reminder"
-                                        value={data.reminder}
-                                        className="mt-1 block w-full"
-                                        autoComplete={"false"}
-                                        isError={errors.reminder}
-                                    />
-                                    <div className='btn btn-active w-1/6'>+</div>
+                                <div className='flex flex-row space-x-5 items-center'>
+                                    <InputLabel forInput="reminder" value="Reminder" />
+                                    <div className='btn btn-xs' onClick={reminderModal.toggle}>+ Tambah</div>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
+                                    {reminders.map((reminder, index) => (
+                                        <div className='card text-center shadow-md pt-2 pb-4 px-2' key={index}> 
+                                            <div className="card-actions justify-end">
+                                                <div className="btn btn-square btn-error btn-xs" onClick={() => handleRemoveReminder(index)}>
+                                                    <IconCross/>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                {reminder} 
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                             <div className="flex items-center justify-between mt-4">
@@ -286,7 +309,11 @@ export default function FormDocument(props) {
                     </div>
                 </div>
             </div>
-            
+            <ModalReminder
+                isOpen={reminderModal.isOpen}
+                toggle={reminderModal.toggle}
+                onAdd={handleAddReminder}
+            />
             
         </AuthenticatedLayout>
     )

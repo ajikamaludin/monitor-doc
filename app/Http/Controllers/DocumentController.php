@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Document;
 use App\Models\TypeDoc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -64,9 +65,10 @@ class DocumentController extends Controller
             'department_id' => 'required|exists:departments,id',
             'pic_name' => 'required|string',
             'email' => 'required|email',
-            // 'document' => 'required|file',
+            'document' => 'required|file',
             'note' => 'nullable',
             'status' => 'required|numeric',
+            'reminders' => 'nullable|array'
         ]);
 
         $lastDocs = Document::orderBy('created_at', 'desc')->first();
@@ -88,11 +90,19 @@ class DocumentController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        // $file = $request->file('document');
-        // $file->store('documents', 'public');
-        $docs->document = '';
-
+        $file = $request->file('document');
+        $file->store('documents', 'public');
+        $docs->document = $file->hashName();
+        
+        DB::beginTransaction();
         $docs->save();
+
+        if ($request->has('reminders')) {
+            foreach ($request->reminders as $reminder) {
+                $docs->reminders()->updateOrCreate(['date' => $reminder]);
+            }
+        }
+        DB::commit();
 
         return redirect()->route('docs.index')
             ->with('message', ['type' => 'success', 'message' => 'The data has beed saved']);
@@ -103,7 +113,7 @@ class DocumentController extends Controller
         return inertia('Document/Form', [
             'types' => TypeDoc::all(),
             'departments' => Department::all(),
-            'doc' => $doc
+            'doc' => $doc->load(['reminders'])
         ]);
     }
 
@@ -146,8 +156,17 @@ class DocumentController extends Controller
             $file->store('documents', 'public');
             $doc->document = $file->hashName();
         }
-
+        
+        DB::beginTransaction();
         $doc->save();
+
+        $doc->reminders()->delete();
+        if ($request->has('reminders')) {
+            foreach ($request->reminders as $reminder) {
+                $doc->reminders()->updateOrCreate(['date' => $reminder]);
+            }
+        }
+        DB::commit();
 
         return redirect()->route('docs.index')
             ->with('message', ['type' => 'success', 'message' => 'The data has beed saved']);
@@ -156,7 +175,7 @@ class DocumentController extends Controller
     public function show(Document $doc)
     {
         return inertia('Document/Detail', [
-            'doc' => $doc->load(['department', 'type', 'creator']),
+            'doc' => $doc->load(['department', 'type', 'creator', 'reminders']),
             'doc_url' => asset('document/'.$doc->document),
         ]);
     }

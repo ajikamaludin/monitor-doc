@@ -46,6 +46,11 @@ class Document extends Model
         return $this->belongsTo(TypeDoc::class, 'type_doc_id');
     }
 
+    public function reminders()
+    {
+        return $this->hasMany(DocumentReminder::class);
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
