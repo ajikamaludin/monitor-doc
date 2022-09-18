@@ -29,6 +29,7 @@ export default function FormDocument(props) {
         document: null,
         document_name: '',
         status: 0,
+        reminder: ''
     });
 
     const inputDocument = useRef()
@@ -256,6 +257,20 @@ export default function FormDocument(props) {
                                     ))}
                                 </select>
                                 <InputError message={errors.status}/>
+                            </div>
+                            <div className='mt-4'>
+                                <InputLabel forInput="reminder" value="Reminder" />
+                                <div className="btn-group w-full">
+                                    <TextInput
+                                        type="text"
+                                        name="reminder"
+                                        value={data.reminder}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        isError={errors.reminder}
+                                    />
+                                    <div className='btn btn-active w-1/6'>+</div>
+                                </div>
                             </div>
                             <div className="flex items-center justify-between mt-4">
                                 <PrimaryButton processing={processing}>

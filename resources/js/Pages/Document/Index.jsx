@@ -96,11 +96,9 @@ export default function Document(props) {
                             <table className="table w-full table-zebra">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>No. Dokumen</th>
-                                        <th>Nama PIC</th>
                                         <th>Jenis</th>
-                                        <th>Deparment</th>
+                                        <th>Nama PIC</th>
+                                        <th>Tanggal Berakhir</th>
                                         <th>Status</th>
                                         <th></th>
                                     </tr>
@@ -108,11 +106,9 @@ export default function Document(props) {
                                 <tbody>
                                     {docs?.map((doc) => (
                                         <tr key={doc.id}>
-                                            <th>{doc.no}</th>
-                                            <td>{doc.no_doc}</td>
-                                            <td>{doc.pic_name}</td>
                                             <td>{doc.type.name}</td>
-                                            <td>{doc.department.name}</td>
+                                            <td>{doc.pic_name}</td>
+                                            <td>{doc.end_date}</td>
                                             <td><DocStatusItem status={doc.status}/></td>
                                             <td className='text-right'>
                                                 <div className="dropdown dropdown-left">
