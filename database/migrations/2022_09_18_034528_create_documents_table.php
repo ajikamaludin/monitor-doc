@@ -29,6 +29,7 @@ return new class extends Migration
             $table->text('note');
             $table->string('document');
             $table->foreignId('user_id')->constrained();
+            $table->smallInteger('status')->default(0);
             $table->timestamps();
         });
     }

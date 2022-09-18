@@ -23,8 +23,18 @@ class Document extends Model
         'email',
         'note',
         'document',
+        'status',
         'user_id',
     ];
+
+    protected $cast = [
+        'start_date' => 'date',
+        'end_date' => 'date'
+    ];
+
+    public const ACTIVE = 0;
+    public const UPDATE = 1;
+    public const EXPIRED = 2;
 
     public function department()
     {

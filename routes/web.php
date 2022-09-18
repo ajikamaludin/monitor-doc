@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\GeneralController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,18 +22,21 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/docs', function () {
-})->name('docs.index');
-
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard',[GeneralController::class, 'index'])->name('dashboard');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/docs', [DocumentController::class, 'index'])->name('docs.index');
+    Route::get('/docs/create', [DocumentController::class, 'create'])->name('docs.create');
+    Route::post('/docs', [DocumentController::class, 'store'])->name('docs.store');
+    Route::delete('/docs/{doc}', [DocumentController::class, 'destroy'])->name('docs.destroy');
+    Route::get('/docs/{doc}', [DocumentController::class, 'edit'])->name('docs.edit');
+    Route::post('/docs/{doc}', [DocumentController::class, 'update'])->name('docs.update');
+    Route::get('/docs/{doc}/show', [DocumentController::class, 'show'])->name('docs.show');
 });
 
 require __DIR__.'/auth.php';

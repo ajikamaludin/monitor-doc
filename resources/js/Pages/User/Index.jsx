@@ -19,23 +19,23 @@ export default function Users(props) {
     const [user, setUser] = useState(null)
     const formModal = useModalState(false)
     const toggle = (user = null) => {
-    setUser(user)
-    formModal.toggle()
+        setUser(user)
+        formModal.toggle()
     }
 
     const confirmModal = useModalState(false)
     const handleDelete = (user) => {
-    confirmModal.setData(user)
-    confirmModal.toggle()
+        confirmModal.setData(user)
+        confirmModal.toggle()
     }
 
     const onDelete = () => {
-    const user = confirmModal.data
-    if(user != null) {
-        Inertia.delete(route('users.destroy', user), {
-            onSuccess: () => toast.success('The Data has been deleted'),
-        })
-    }
+        const user = confirmModal.data
+        if(user != null) {
+            Inertia.delete(route('users.destroy', user), {
+                onSuccess: () => toast.success('The Data has been deleted'),
+            })
+        }
     }
 
     useEffect(() => {
@@ -55,6 +55,7 @@ export default function Users(props) {
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
+            flash={props.flash}
         >
             <Head title="Users" />
             <div className="flex flex-col w-full sm:px-6 lg:px-8 space-y-2">

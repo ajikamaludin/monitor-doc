@@ -9,6 +9,8 @@ export default function TextInput({
     required,
     isFocused,
     handleChange,
+    isError,
+    readOnly = false
 }) {
     const input = useRef();
 
@@ -18,20 +20,37 @@ export default function TextInput({
         }
     }, []);
 
+    if (type === "textarea") {
+        return (
+            <textarea 
+                className={`
+                    ${isError ? ' textarea-error ' : ''}
+                    textarea textarea-bordered ${className}
+                `}
+                required={required}
+                onChange={(e) => handleChange(e)}
+                value={value}
+                name={name}
+                readOnly={readOnly}
+            >
+            </textarea>
+        )
+    }
     return (
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start px-1">
             <input
                 type={type}
                 name={name}
                 value={value}
-                className={
-                    `input input-bordered w-full ` +
-                    className
-                }
+                className={`
+                    ${isError ? ' input-error ' : ''}
+                    input input-bordered w-full ${className}
+                `}
                 ref={input}
                 autoComplete={autoComplete}
                 required={required}
                 onChange={(e) => handleChange(e)}
+                readOnly={readOnly}
             />
         </div>
     );

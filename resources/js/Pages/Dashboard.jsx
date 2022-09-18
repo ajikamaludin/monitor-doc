@@ -3,36 +3,39 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/inertia-react';
 
 export default function Dashboard(props) {
+    const { count_active, count_update, count_expired, count_total } = props
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
+            flash={props.flash}
         >
             <Head title="Dashboard" />
 
-            <div className='max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between space-x-1'>
-                <div class="stats bg-base-100 border-base-300 border md:w-1/4">
-                    <div class="stat">
-                        <div class="stat-title">Dokumen Aktif</div> 
-                        <div class="stat-value">1,400</div> 
+            <div className='mx-auto px-2 md:px-4 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1'>
+                <div className="stats bg-base-100 shadow-md w-full">
+                    <div className="stat">
+                        <div className="stat-title">Dokumen Aktif</div> 
+                        <div className="stat-value">{count_active}</div> 
                     </div>
                 </div>
-                <div class="stats bg-base-100 border-base-300 border md:w-1/4">
-                    <div class="stat">
-                        <div class="stat-title">Dokumen Diperbarui</div> 
-                        <div class="stat-value">2,400</div> 
+                <div className="stats bg-base-100 shadow-md w-full">
+                    <div className="stat">
+                        <div className="stat-title">Dokumen Diperbarui</div> 
+                        <div className="stat-value">{count_update}</div> 
                     </div>
                 </div>
-                <div class="stats bg-base-100 border-base-300 border md:w-1/4">
-                    <div class="stat">
-                        <div class="stat-title">Dokumen Berakhir</div> 
-                        <div class="stat-value">1,400</div> 
+                <div className="stats bg-base-100 shadow-md w-full">
+                    <div className="stat">
+                        <div className="stat-title">Dokumen Berakhir</div> 
+                        <div className="stat-value">{count_expired}</div> 
                     </div>
                 </div>
-                <div class="stats bg-base-100 border-base-300 border md:w-1/4">
-                    <div class="stat">
-                        <div class="stat-title">Total Dokumen</div> 
-                        <div class="stat-value">4,400</div> 
+                <div className="stats bg-base-100 shadow-md w-full">
+                    <div className="stat">
+                        <div className="stat-title">Total Dokumen</div> 
+                        <div className="stat-value">{count_total}</div> 
                     </div>
                 </div>
             </div>

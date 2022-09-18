@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
 import MenuItem from '@/Components/SidebarMenuItem';
 
-export default function Authenticated({ auth, children }) {
+export default function Authenticated({ auth, children, flash }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
+    useEffect(() => {
+        if (flash.message !== null) {
+            toast(flash.message.message, {type: flash.message.type})
+        }
+    }, [flash])
+
     return (
-        <div className="min-h-screen bg-base-200">
+        <div className="min-h-screen bg-base-200 pb-10">
             <nav className="bg-base-100 border-b border-base-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto" />
+                                    <ApplicationLogo className="font-bold text-3xl block h-9 w-auto" />
                                 </Link>
                             </div>
 
