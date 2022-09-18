@@ -39,7 +39,7 @@ export default function Document(props) {
     const handleFilter = (filter) => {
         setSearch({
             ...search,
-            ...filter
+            ...filter,
         })
     }
 
@@ -92,7 +92,7 @@ export default function Document(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="overflow-x-auto pb-52">
+                        <div className="overflow-x-auto pb-44">
                             <table className="table w-full table-zebra">
                                 <thead>
                                     <tr>

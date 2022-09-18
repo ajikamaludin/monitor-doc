@@ -6,6 +6,8 @@ use App\Models\Department;
 use App\Models\Document;
 use App\Models\TypeDoc;
 use Illuminate\Http\Request;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class DocumentController extends Controller
 {
@@ -14,21 +16,23 @@ class DocumentController extends Controller
         $query = Document::with(['department', 'type'])->orderBy('created_at');
 
         if ($request->q != null || $request->q != '') {
-            $query->where('no_doc', 'like', '%'.$request->q.'%')
+            $query->where(function ($query) use ($request) {
+                $query->where('no_doc', 'like', '%'.$request->q.'%')
                 ->orWhere('company_name', 'like', '%'.$request->q.'%')
                 ->orWhere('pic_name', 'like', '%'.$request->q.'%')
                 ->orWhere('email', 'like', '%'.$request->q.'%');
+            });
         }
 
-        if ($request->department_id != ''){
+        if ($request->department_id != '') {
             $query->where('department_id', $request->department_id);
         }
 
-        if ($request->status != ''){
+        if ($request->status != '') {
             $query->where('status', $request->status);
         }
 
-        if ($request->type_doc_id != ''){
+        if ($request->type_doc_id != '') {
             $query->where('type_doc_id', $request->type_doc_id);
         }
 
@@ -138,7 +142,7 @@ class DocumentController extends Controller
         ]);
 
         $file = $request->file('document');
-        if($file != null) {
+        if ($file != null) {
             $file->store('documents', 'public');
             $doc->document = $file->hashName();
         }
@@ -155,6 +159,58 @@ class DocumentController extends Controller
             'doc' => $doc->load(['department', 'type', 'creator']),
             'doc_url' => asset('document/'.$doc->document),
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $query = Document::with(['department', 'type', 'creator'])->orderBy('created_at');
+
+        if ($request->q != null || $request->q != '') {
+            $query->where(function ($query) use ($request) {
+                $query->where('no_doc', 'like', '%'.$request->q.'%')
+                ->orWhere('company_name', 'like', '%'.$request->q.'%')
+                ->orWhere('pic_name', 'like', '%'.$request->q.'%')
+                ->orWhere('email', 'like', '%'.$request->q.'%');
+            });
+        }
+
+        if ($request->department_id != '') {
+            $query->where('department_id', $request->department_id);
+        }
+
+        if ($request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->type_doc_id != '') {
+            $query->where('type_doc_id', $request->type_doc_id);
+        }
+
+        $collections = collect([]);
+        foreach ($query->get() as $document) {
+            $collections->add([
+                'no dokumen' => $document->no_doc,
+                'jenis dokumen' => $document->type->name,
+                'nama perusahaan' => $document->company_name,
+                'nama pihak pertama' => $document->first_person_name,
+                'nama pihak kedua' => $document->second_person_name,
+                'tanggal mulai' => $document->start_date,
+                'tanggal selesai' => $document->end_date,
+                'department' => $document->department->name,
+                'nama pic' => $document->pic_name,
+                'email' => $document->email,
+                'catata' => $document->note,
+                'status' => $document->status,
+                'user_creator' => $document->creator->name,
+            ]);
+        }
+
+        $date = now()->format('d-m-y');
+        $header_style = (new StyleBuilder())->setFontBold()->build();
+
+        return (new FastExcel($collections))
+            ->headerStyle($header_style)
+            ->download("documents-$date.xlsx");
     }
 
     public function destroy(Document $doc)

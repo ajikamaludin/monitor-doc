@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Inertia } from '@inertiajs/inertia'
 import { statuses } from '@/utils'
 import InputLabel from '@/Components/InputLabel'
 
@@ -31,8 +32,11 @@ export default function ModalFilter(props) {
         })
     }
 
-    const onClickExport = () => {
-        // call export url 
+    const params = {
+        q: filter.q,
+        ype_doc_id: type,
+        status: status,
+        department_id: dep
     }
 
     return (
@@ -95,7 +99,7 @@ export default function ModalFilter(props) {
                 <div className='flex justify-center mt-4 space-x-4'>
                     <div className='btn btn-outline' onClick={onClickFilter}>Filter</div>
                     <div className='btn btn-outline' onClick={onClickReset}>Reset</div>
-                    <div className='btn btn-info btn-outline' onClick={onClickExport}>Export</div>
+                    <a href={`${route('docs.export', params)}`} className='btn btn-info btn-outline'>Export</a>
                 </div>
             </div>
         </div>
