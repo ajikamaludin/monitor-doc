@@ -56,7 +56,7 @@ export default function UserFormModal(props) {
 
     return (
         <div
-            className="modal"
+            className="modal modal-bottom sm:modal-middle pb-10"
             style={
                 isOpen
                     ? {

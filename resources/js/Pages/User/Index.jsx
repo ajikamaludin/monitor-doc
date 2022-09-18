@@ -55,83 +55,77 @@ export default function Users(props) {
         <AuthenticatedLayout
             auth={props.auth}
             errors={props.errors}
-            header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Users
-                </h2>
-            }
         >
             <Head title="Users" />
-            <div className="">
-                <div className="flex flex-col w-full sm:px-6 lg:px-8 space-y-2">
-                    <div className="card bg-white w-full">
-                        <div className="card-body">
-                            <div className="flex w-full mb-4 justify-between">
-                                <div
-                                    className="btn btn-neutral"
-                                    onClick={() => toggle()}
-                                >
-                                    Tambah
-                                </div>
-                                <div className="form-control">
-                                    <input
-                                        type="text"
-                                        className="input input-bordered"
-                                        value={search}
-                                        onChange={(e) =>
-                                            setSearch(e.target.value)
-                                        }
-                                        placeholder="Search"
-                                    />
-                                </div>
+            <div className="flex flex-col w-full sm:px-6 lg:px-8 space-y-2">
+                <div className="card bg-base-100 w-full">
+                    <div className="card-body">
+                        <div className="flex w-full mb-4 justify-between">
+                            <div
+                                className="btn btn-neutral"
+                                onClick={() => toggle()}
+                            >
+                                Tambah
                             </div>
-                            <div className="overflow-x-auto">
-                                <table className="table w-full table-zebra">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Nama</th>
-                                            <th>Email</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {users?.map((user) => (
-                                            <tr key={user.id}>
-                                                <th>{user.id}</th>
-                                                <td>{user.name}</td>
-                                                <td>{user.email}</td>
-                                                <td className="text-right">
+                            <div className="form-control">
+                                <input
+                                    type="text"
+                                    className="input input-bordered"
+                                    value={search}
+                                    onChange={(e) =>
+                                        setSearch(e.target.value)
+                                    }
+                                    placeholder="Search"
+                                />
+                            </div>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="table w-full table-zebra">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {users?.map((user) => (
+                                        <tr key={user.id}>
+                                            <th>{user.id}</th>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td className="text-right">
+                                                <div
+                                                    className="btn btn-primary mx-1"
+                                                    onClick={() =>
+                                                        toggle(user)
+                                                    }
+                                                >
+                                                    Edit
+                                                </div>
+                                                {props.auth.user.id !==
+                                                    user.id && (
                                                     <div
-                                                        className="btn btn-primary mx-1"
+                                                        className="btn btn-secondary mx-1"
                                                         onClick={() =>
-                                                            toggle(user)
+                                                            handleDelete(user)
                                                         }
                                                     >
-                                                        Edit
+                                                        Delete
                                                     </div>
-                                                    {props.auth.user.id !==
-                                                        user.id && (
-                                                        <div
-                                                            className="btn btn-secondary mx-1"
-                                                            onClick={() =>
-                                                                handleDelete(user)
-                                                            }
-                                                        >
-                                                            Delete
-                                                        </div>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <Pagination links={links} />
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
+                        <Pagination links={links} />
                     </div>
                 </div>
             </div>
+            
             <UserFormModal
                 isOpen={formModal.isOpen}
                 toggle={toggle}

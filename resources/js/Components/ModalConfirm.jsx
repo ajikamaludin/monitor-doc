@@ -10,7 +10,7 @@ export default function ModalConfirm(props) {
 
     return (
         <div
-            className="modal"
+            className="modal modal-bottom sm:modal-middle pb-10"
             style={
                 isOpen
                     ? {
