@@ -39,7 +39,11 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        User::create($request->only(['name', 'email', 'password']));
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
 
         return redirect()->route('users.index');
     }
@@ -61,7 +65,7 @@ class UserController extends Controller
 
         $user->update($request->only(['name', 'email']));
         if ($request->password != null) {
-            $user->update(['password' => $request->password]);
+            $user->update(['password' => bcrypt($request->password)]);
         }
 
         return redirect()->back();
