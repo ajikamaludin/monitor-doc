@@ -140,7 +140,6 @@ export default function Authenticated({ auth, children }) {
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
-                theme="colored"
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick
