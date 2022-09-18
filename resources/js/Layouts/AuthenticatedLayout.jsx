@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
+import { ToastContainer } from 'react-toastify'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
+import MenuItem from '@/Components/SidebarMenuItem';
 
-export default function Authenticated({ auth, header, children }) {
+export default function Authenticated({ auth, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -20,11 +21,11 @@ export default function Authenticated({ auth, header, children }) {
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            {/* <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
@@ -94,6 +95,12 @@ export default function Authenticated({ auth, header, children }) {
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('docs.index')} active={route().current('docs.*')}>
+                            Monitoring
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('users.index')} active={route().current('users.*')}>
+                            Users
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
@@ -111,13 +118,37 @@ export default function Authenticated({ auth, header, children }) {
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
-                </header>
-            )}
+            <div className='flex flex-row md:mt-5 max-w-7xl mx-auto'>
+                <div className='w-auto hidden md:block'>
+                    <aside className="ml-5 w-64" aria-label="Sidebar">
+                        <div className="overflow-y-auto py-4 px-3 bg-white rounded dark:bg-gray-800">
+                            <ul className="space-y-2">
+                                <MenuItem routeName='dashboard' active='dashboard' name='Dashboard' />
+                                <MenuItem routeName='docs.index' active='docs.*' name='Monitoring' />
+                                {auth.user.is_admin === 1 && (
+                                <MenuItem routeName='users.index' active='users.*' name='Users' />
+                                )}
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
 
-            <main>{children}</main>
+                <div className='w-full pt-5 md:pt-0'>
+                    <main>{children}</main>
+                </div>
+            </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                theme="colored"
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 }
