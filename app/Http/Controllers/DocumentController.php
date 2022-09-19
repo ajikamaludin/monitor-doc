@@ -22,6 +22,7 @@ class DocumentController extends Controller
         } else {
             $query->orderBy('created_at');
         }
+
         if ($request->q != null || $request->q != '') {
             $query->where(function ($query) use ($request) {
                 $query->where('no_doc', 'like', '%'.$request->q.'%')
@@ -252,9 +253,9 @@ class DocumentController extends Controller
         foreach ($request->shares as $share) {
             $user = User::where('email', $share['share_to'])->first();
             if ($user != null) {
-                $doc->shares()->create(['user_id' => $user->id, 'share_to' => $share['share_to']]);
+                $doc->shares()->updateOrCreate(['user_id' => $user->id, 'share_to' => $share['share_to']]);
             } else {
-                $doc->shares()->create(['share_to' => $share['share_to']]);
+                $doc->shares()->updateOrCreate(['share_to' => $share['share_to']]);
             }
             // TODO: plase send email here
         }

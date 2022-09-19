@@ -13,6 +13,8 @@ export default function Dashboard(props) {
     const calenderEvents = events.map(e => { return {title: `${e.document.no_doc} - ${e.document.pic_name}`, date: e.date} }) 
 
     const handleDateClick = (arg) => { // bind with an arrow function
+        // apa yang harus di handle: tampilkan saja modal yang ada event pada date ini kemudian bisa tambah reminder atau hapus reminder pada data ini,
+        // untuk tambah reminder pilih form doc id saja kemudian tambah , untuk delete cukup confirm kemudian hilang
         alert(arg.dateStr)
       }
 
@@ -50,7 +52,7 @@ export default function Dashboard(props) {
                     </div>
                 </div>
             </div>
-            <div className='bg-base-100 mx-8 mt-4 p-2 md:p-4 lg:p-8'>
+            <div className='bg-base-100 mx-2 md:mx-8 mt-4 p-2 md:p-4 lg:p-8 h-auto'>
                 <FullCalendar
                     plugins={[ dayGridPlugin, interactionPlugin ]}
                     initialView="dayGridMonth"

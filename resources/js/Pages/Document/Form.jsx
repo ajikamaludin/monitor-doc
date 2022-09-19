@@ -282,14 +282,14 @@ export default function FormDocument(props) {
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
                                     {reminders.map((reminder, index) => (
-                                        <div className='card text-center shadow-md pt-2 pb-4 px-2' key={index}> 
-                                            <div className="card-actions justify-end">
+                                        <div className='card text-center shadow-md pt-2 pb-2 px-2 bg-blue-300' key={index}> 
+                                            <div className='flex'>
+                                                <div  className='flex-1'>
+                                                    {reminder} 
+                                                </div>
                                                 <div className="btn btn-square btn-error btn-xs" onClick={() => handleRemoveReminder(index)}>
                                                     <IconCross/>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                {reminder} 
                                             </div>
                                         </div>
                                     ))}

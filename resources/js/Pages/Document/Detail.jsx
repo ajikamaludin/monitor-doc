@@ -159,7 +159,7 @@ export default function FormDocument(props) {
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
                                     {doc.reminders.map((reminder, index) => (
-                                        <div className='card text-center shadow-md pt-2 pb-4 px-2' key={index}> 
+                                        <div className='card text-center shadow-md pt-2 pb-2 px-2 bg-blue-300' key={index}> 
                                             <div>
                                                 {reminder.date} 
                                             </div>
