@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\TypeDoc;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
@@ -14,8 +15,13 @@ class DocumentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Document::with(['department', 'type'])->orderBy('created_at');
+        $query = Document::with(['department', 'type', 'shares']);
 
+        if ($request->has('sortBy') && $request->has('sortRule')) {
+            $query->orderBy($request->sortBy, $request->sortRule);
+        } else {
+            $query->orderBy('created_at');
+        }
         if ($request->q != null || $request->q != '') {
             $query->where(function ($query) use ($request) {
                 $query->where('no_doc', 'like', '%'.$request->q.'%')
@@ -230,6 +236,33 @@ class DocumentController extends Controller
         return (new FastExcel($collections))
             ->headerStyle($header_style)
             ->download("documents-$date.xlsx");
+    }
+
+    public function share(Request $request, Document $doc)
+    {
+        $request->validate([
+            'shares' => 'array',
+            'shares.*.share_to' => 'required|email'
+        ]);
+
+        DB::beginTransaction();
+
+        $doc->shares()->delete();
+
+        foreach ($request->shares as $share) {
+            $user = User::where('email', $share['share_to'])->first();
+            if ($user != null) {
+                $doc->shares()->create(['user_id' => $user->id, 'share_to' => $share['share_to']]);
+            } else {
+                $doc->shares()->create(['share_to' => $share['share_to']]);
+            }
+            // TODO: plase send email here
+        }
+
+        DB::commit();
+
+        return redirect()->route('docs.index')
+            ->with('message', ['type' => 'success', 'message' => 'Document success shared']);
     }
 
     public function destroy(Document $doc)

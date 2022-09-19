@@ -10,7 +10,9 @@ export default function TextInput({
     isFocused,
     handleChange,
     isError,
-    readOnly = false
+    readOnly = false,
+    placeholder = '',
+    onKeyDown = () => {},
 }) {
     const input = useRef();
 
@@ -51,6 +53,8 @@ export default function TextInput({
                 required={required}
                 onChange={(e) => handleChange(e)}
                 readOnly={readOnly}
+                placeholder={placeholder}
+                onKeyDown={onKeyDown}
             />
         </div>
     );

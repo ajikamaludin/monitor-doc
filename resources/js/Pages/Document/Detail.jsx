@@ -153,7 +153,24 @@ export default function FormDocument(props) {
                                 <InputLabel forInput="status" value="Status" />
                                 <DocStatusItem status={doc.status}/>
                             </div>
-                            <div className="flex items-center justify-end mt-4">
+                            <div className='mt-4'>
+                                <div className='flex flex-row space-x-5 items-center'>
+                                    <InputLabel forInput="reminder" value="Reminder" />
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
+                                    {doc.reminders.map((reminder, index) => (
+                                        <div className='card text-center shadow-md pt-2 pb-4 px-2' key={index}> 
+                                            <div>
+                                                {reminder.date} 
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-between mt-4">
+                                <Link href={route('docs.edit', doc)} className="btn btn-outline">
+                                    Edit
+                                </Link>
                                 <Link href={route('docs.index')} className="btn btn-outline">
                                     Kembali
                                 </Link>

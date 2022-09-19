@@ -51,6 +51,11 @@ class Document extends Model
         return $this->hasMany(DocumentReminder::class);
     }
 
+    public function shares()
+    {
+        return $this->hasMany(DocumentShare::class);
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');

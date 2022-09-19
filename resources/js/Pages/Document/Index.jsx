@@ -9,6 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Pagination from '@/Components/Pagination'
 import ModalConfirm from '@/Components/ModalConfirm'
 import ModalFilter from './ModalFilter'
+import ModalShare from './ModalShare'
 import DocStatusItem from './DocStatusItem'
 import { IconFilter, IconMenu } from '@/Icons'
 
@@ -35,11 +36,24 @@ export default function Document(props) {
     }
 
     const filterModal = useModalState(false)
-
     const handleFilter = (filter) => {
         setSearch({
             ...search,
             ...filter,
+        })
+    }
+
+    const shareModal = useModalState(false)
+    const handleShare = (doc) => {
+        shareModal.setData(doc)
+        shareModal.toggle()
+    }
+
+    const sort = (key) => {
+        setSearch({
+            ...search,
+            sortBy: key,
+            sortRule: search.sortRule == 'asc' ? 'desc' : 'asc'
         })
     }
 
@@ -96,10 +110,10 @@ export default function Document(props) {
                             <table className="table w-full table-zebra">
                                 <thead>
                                     <tr>
-                                        <th>Jenis</th>
+                                        <th className='hover:underline' onClick={() => sort('type_doc_id')}>Jenis</th>
                                         <th>Nama PIC</th>
-                                        <th>Tanggal Berakhir</th>
-                                        <th>Status</th>
+                                        <th className='hover:underline' onClick={() => sort('end_date')}>Tanggal Berakhir</th>
+                                        <th className='hover:underline' onClick={() => sort('status')}>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -117,7 +131,7 @@ export default function Document(props) {
                                                         <li>
                                                             <Link href={route('docs.show', doc)}>Detail</Link>
                                                         </li>
-                                                        <li>
+                                                        <li onClick={() => handleShare(doc)}>
                                                             <div>Share</div>
                                                         </li>
                                                         <li>
@@ -152,6 +166,11 @@ export default function Document(props) {
                 types={types}
                 departments={departments}
                 handleSetFilter={handleFilter}
+            />
+            <ModalShare
+                isOpen={shareModal.isOpen}
+                toggle={shareModal.toggle}
+                modalState={shareModal}
             />
         </AuthenticatedLayout>
     )
