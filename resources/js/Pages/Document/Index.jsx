@@ -12,6 +12,7 @@ import ModalFilter from './ModalFilter'
 import ModalShare from './ModalShare'
 import DocStatusItem from './DocStatusItem'
 import { IconFilter, IconMenu } from '@/Icons'
+import { formatDate } from '@/utils'
 
 export default function Document(props) {
     const { types, departments } = props
@@ -122,7 +123,7 @@ export default function Document(props) {
                                         <tr key={doc.id}>
                                             <td>{doc.type.name}</td>
                                             <td>{doc.pic_name}</td>
-                                            <td>{doc.end_date}</td>
+                                            <td>{formatDate(doc.end_date)}</td>
                                             <td><DocStatusItem status={doc.status}/></td>
                                             <td className='text-right'>
                                                 <div className="dropdown dropdown-left">

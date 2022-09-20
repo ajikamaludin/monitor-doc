@@ -27,9 +27,9 @@ class Document extends Model
         'user_id',
     ];
 
-    protected $cast = [
-        'start_date' => 'date',
-        'end_date' => 'date'
+    protected $casts = [
+        'start_date' => 'datetime:Y-m-d',
+        'end_date' => 'datetime:Y-m-d'
     ];
 
     public const ACTIVE = 0;

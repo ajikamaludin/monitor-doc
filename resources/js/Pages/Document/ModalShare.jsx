@@ -71,7 +71,7 @@ export default function ModalShare(props) {
                 <div className='py-4'>
                     <div className="flex flex-wrap">
                         {shares.map((share, index) => (
-                            <div className="card shadow-md rounded-xl bg-slate-400 m-1" key={share.id}>
+                            <div className="card shadow-md rounded-xl bg-slate-400 m-1" key={`share-${index}`}>
                                 <span className='flex items-center px-2 py-1'>
                                     <p className='pr-1'>
                                         {share.share_to}

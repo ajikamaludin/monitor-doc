@@ -5,10 +5,19 @@ import DocStatusItem from './DocStatusItem'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import InputLabel from '@/Components/InputLabel'
 import TextInput from '@/Components/TextInput'
+import { formatDate } from '@/utils'
+import ModalShare from './ModalShare'
+import { useModalState } from '@/Hooks'
 
 
 export default function FormDocument(props) {
     const { doc, doc_url }= props
+
+    const shareModal = useModalState(false)
+    const handleShare = (doc) => {
+        shareModal.setData(doc)
+        shareModal.toggle()
+    }
 
     return (
         <AuthenticatedLayout
@@ -82,9 +91,9 @@ export default function FormDocument(props) {
                             <div className='mt-4'>
                                 <InputLabel forInput="start_date" value="Tanggal Mulai" />
                                 <TextInput
-                                    type="date"
+                                    type="text"
                                     name="start_date"
-                                    value={doc.start_date}
+                                    value={formatDate(doc.start_date)}
                                     className="mt-1 block w-full"
                                     autoComplete={"false"}
                                     readOnly={true}
@@ -93,9 +102,9 @@ export default function FormDocument(props) {
                             <div className='mt-4'>
                                 <InputLabel forInput="end_date" value="Tanggal Berakhir" />
                                 <TextInput
-                                    type="date"
+                                    type="text"
                                     name="end_date"
-                                    value={doc.end_date}
+                                    value={formatDate(doc.end_date)}
                                     className="mt-1 block w-full"
                                     autoComplete={"false"}
                                     readOnly={true}
@@ -168,9 +177,14 @@ export default function FormDocument(props) {
                                 </div>
                             </div>
                             <div className="flex items-center justify-between mt-4">
-                                <Link href={route('docs.edit', doc)} className="btn btn-outline">
-                                    Edit
-                                </Link>
+                                <div className='flex flex-row space-x-1'>
+                                    <Link href={route('docs.edit', doc)} className="btn btn-outline">
+                                        Edit
+                                    </Link>
+                                    <div className='btn btn-outline' onClick={() => handleShare(doc)}>
+                                        Share
+                                    </div>
+                                </div>
                                 <Link href={route('docs.index')} className="btn btn-outline">
                                     Kembali
                                 </Link>
@@ -180,7 +194,11 @@ export default function FormDocument(props) {
                     </div>
                 </div>
             </div>
-            
+            <ModalShare
+                isOpen={shareModal.isOpen}
+                toggle={shareModal.toggle}
+                modalState={shareModal}
+            />
             
         </AuthenticatedLayout>
     )

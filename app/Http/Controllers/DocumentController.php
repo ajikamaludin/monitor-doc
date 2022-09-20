@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DocumentShare;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\TypeDoc;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -182,7 +184,7 @@ class DocumentController extends Controller
     public function show(Document $doc)
     {
         return inertia('Document/Detail', [
-            'doc' => $doc->load(['department', 'type', 'creator', 'reminders']),
+            'doc' => $doc->load(['department', 'type', 'creator', 'reminders', 'shares']),
             'doc_url' => asset('document/'.$doc->document),
         ]);
     }
@@ -257,7 +259,7 @@ class DocumentController extends Controller
             } else {
                 $doc->shares()->updateOrCreate(['share_to' => $share['share_to']]);
             }
-            // TODO: plase send email here
+            Mail::to($share['share_to'])->queue(new DocumentShare($doc));
         }
 
         DB::commit();
