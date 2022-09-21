@@ -13,7 +13,7 @@ export default function Dashboard(props) {
 
     const calenderEvents = events.map(e => { 
         return {
-            title: `${e.document.no_doc} - ${e.document.pic_name}`, 
+            title: `${e.document.type.name} - ${e.document.name}`, 
             date: e.date, 
             id : e.id,
             url: route('docs.show', e.document)

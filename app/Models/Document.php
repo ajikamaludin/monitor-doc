@@ -25,6 +25,7 @@ class Document extends Model
         'document',
         'status',
         'user_id',
+        'name',
     ];
 
     protected $casts = [

@@ -30,9 +30,8 @@ class DocumentNotification extends Mailable
     public function build()
     {
         return $this->markdown('emails.document.notification', [
-            'no_doc' => $this->doc->no_doc,
-            'end_date' => $this->doc->end_date->format('d-m-Y'),
-            'url' => route('docs.show', $this->doc)
+            'doc' => $this->doc->load(['type']),
+            'url' => route('docs.show', $this->doc->id)
         ]);
     }
 }

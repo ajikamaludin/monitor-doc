@@ -112,6 +112,7 @@ export default function Document(props) {
                                 <thead>
                                     <tr>
                                         <th className='hover:underline' onClick={() => sort('type_doc_id')}>Jenis</th>
+                                        <th>Nama Dokumen</th>
                                         <th>Nama PIC</th>
                                         <th className='hover:underline' onClick={() => sort('end_date')}>Tanggal Berakhir</th>
                                         <th className='hover:underline' onClick={() => sort('status')}>Status</th>
@@ -122,6 +123,7 @@ export default function Document(props) {
                                     {docs?.map((doc) => (
                                         <tr key={doc.id}>
                                             <td>{doc.type.name}</td>
+                                            <td>{doc.name}</td>
                                             <td>{doc.pic_name}</td>
                                             <td>{formatDate(doc.end_date)}</td>
                                             <td><DocStatusItem status={doc.status}/></td>

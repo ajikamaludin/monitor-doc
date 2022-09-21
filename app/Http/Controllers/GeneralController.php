@@ -15,7 +15,7 @@ class GeneralController extends Controller
             'count_update' => Document::where('status', Document::UPDATE)->count(),
             'count_expired' => Document::where('status', Document::EXPIRED)->count(),
             'count_total' => Document::count(),
-            'events' => DocumentReminder::with('document')->get(),
+            'events' => DocumentReminder::with('document.type')->get(),
         ]);
     }
 }

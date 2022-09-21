@@ -30,6 +30,7 @@ class DocumentController extends Controller
                 $query->where('no_doc', 'like', '%'.$request->q.'%')
                 ->orWhere('company_name', 'like', '%'.$request->q.'%')
                 ->orWhere('pic_name', 'like', '%'.$request->q.'%')
+                ->orWhere('name', 'like', '%'.$request->q.'%')
                 ->orWhere('email', 'like', '%'.$request->q.'%');
             });
         }
@@ -77,13 +78,15 @@ class DocumentController extends Controller
             'document' => 'required|file',
             'note' => 'nullable',
             'status' => 'required|numeric',
-            'reminders' => 'nullable|array'
+            'reminders' => 'nullable|array',
+            'name' => 'required|string'
         ]);
 
         $lastDocs = Document::orderBy('created_at', 'desc')->first();
         $lastDocs = $lastDocs ? $lastDocs : Document::make(['no' => 0]);
         $docs = Document::make([
             'no' => $lastDocs->no + 1,
+            'name' => $request->name,
             'no_doc' => $request->no_doc,
             'company_name' => $request->company_name,
             'first_person_name' => $request->first_person_name,
@@ -141,12 +144,14 @@ class DocumentController extends Controller
             'email' => 'required|email',
             'document' => 'nullable|file',
             'note' => 'nullable',
+            'name' => 'required|string',
             'status' => 'required|numeric',
         ]);
 
 
         $doc->fill([
             'no_doc' => $request->no_doc,
+            'name' => $request->name,
             'company_name' => $request->company_name,
             'first_person_name' => $request->first_person_name,
             'second_person_name' => $request->second_person_name,
@@ -218,6 +223,7 @@ class DocumentController extends Controller
         foreach ($query->get() as $document) {
             $collections->add([
                 'no dokumen' => $document->no_doc,
+                'nama' => $document->name,
                 'jenis dokumen' => $document->type->name,
                 'nama perusahaan' => $document->company_name,
                 'nama pihak pertama' => $document->first_person_name,
