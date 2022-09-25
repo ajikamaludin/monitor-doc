@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/docs/{doc}', [DocumentController::class, 'edit'])->name('docs.edit');
     Route::post('/docs/{doc}', [DocumentController::class, 'update'])->name('docs.update');
     Route::get('/docs/{doc}/show', [DocumentController::class, 'show'])->name('docs.show');
+    Route::post('/docs/{doc}/share', [DocumentController::class, 'share'])->name('docs.share');
 });
 
 require __DIR__.'/auth.php';

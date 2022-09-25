@@ -25,11 +25,12 @@ class Document extends Model
         'document',
         'status',
         'user_id',
+        'name',
     ];
 
-    protected $cast = [
-        'start_date' => 'date',
-        'end_date' => 'date'
+    protected $casts = [
+        'start_date' => 'datetime:Y-m-d',
+        'end_date' => 'datetime:Y-m-d'
     ];
 
     public const ACTIVE = 0;
@@ -49,6 +50,11 @@ class Document extends Model
     public function reminders()
     {
         return $this->hasMany(DocumentReminder::class);
+    }
+
+    public function shares()
+    {
+        return $this->hasMany(DocumentShare::class);
     }
 
     public function creator()

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DocumentShare;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\TypeDoc;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -14,13 +17,20 @@ class DocumentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Document::with(['department', 'type'])->orderBy('created_at');
+        $query = Document::with(['department', 'type', 'shares']);
+
+        if ($request->has('sortBy') && $request->has('sortRule')) {
+            $query->orderBy($request->sortBy, $request->sortRule);
+        } else {
+            $query->orderBy('created_at');
+        }
 
         if ($request->q != null || $request->q != '') {
             $query->where(function ($query) use ($request) {
                 $query->where('no_doc', 'like', '%'.$request->q.'%')
                 ->orWhere('company_name', 'like', '%'.$request->q.'%')
                 ->orWhere('pic_name', 'like', '%'.$request->q.'%')
+                ->orWhere('name', 'like', '%'.$request->q.'%')
                 ->orWhere('email', 'like', '%'.$request->q.'%');
             });
         }
@@ -68,13 +78,15 @@ class DocumentController extends Controller
             'document' => 'required|file',
             'note' => 'nullable',
             'status' => 'required|numeric',
-            'reminders' => 'nullable|array'
+            'reminders' => 'nullable|array',
+            'name' => 'required|string'
         ]);
 
         $lastDocs = Document::orderBy('created_at', 'desc')->first();
         $lastDocs = $lastDocs ? $lastDocs : Document::make(['no' => 0]);
         $docs = Document::make([
             'no' => $lastDocs->no + 1,
+            'name' => $request->name,
             'no_doc' => $request->no_doc,
             'company_name' => $request->company_name,
             'first_person_name' => $request->first_person_name,
@@ -132,12 +144,14 @@ class DocumentController extends Controller
             'email' => 'required|email',
             'document' => 'nullable|file',
             'note' => 'nullable',
+            'name' => 'required|string',
             'status' => 'required|numeric',
         ]);
 
 
         $doc->fill([
             'no_doc' => $request->no_doc,
+            'name' => $request->name,
             'company_name' => $request->company_name,
             'first_person_name' => $request->first_person_name,
             'second_person_name' => $request->second_person_name,
@@ -175,7 +189,7 @@ class DocumentController extends Controller
     public function show(Document $doc)
     {
         return inertia('Document/Detail', [
-            'doc' => $doc->load(['department', 'type', 'creator', 'reminders']),
+            'doc' => $doc->load(['department', 'type', 'creator', 'reminders', 'shares']),
             'doc_url' => asset('documents/'.$doc->document),
         ]);
     }
@@ -209,6 +223,7 @@ class DocumentController extends Controller
         foreach ($query->get() as $document) {
             $collections->add([
                 'no dokumen' => $document->no_doc,
+                'nama' => $document->name,
                 'jenis dokumen' => $document->type->name,
                 'nama perusahaan' => $document->company_name,
                 'nama pihak pertama' => $document->first_person_name,
@@ -230,6 +245,33 @@ class DocumentController extends Controller
         return (new FastExcel($collections))
             ->headerStyle($header_style)
             ->download("documents-$date.xlsx");
+    }
+
+    public function share(Request $request, Document $doc)
+    {
+        $request->validate([
+            'shares' => 'array',
+            'shares.*.share_to' => 'required|email'
+        ]);
+
+        DB::beginTransaction();
+
+        $doc->shares()->delete();
+
+        foreach ($request->shares as $share) {
+            $user = User::where('email', $share['share_to'])->first();
+            if ($user != null) {
+                $doc->shares()->updateOrCreate(['user_id' => $user->id, 'share_to' => $share['share_to']]);
+            } else {
+                $doc->shares()->updateOrCreate(['share_to' => $share['share_to']]);
+            }
+            Mail::to($share['share_to'])->queue(new DocumentShare($doc));
+        }
+
+        DB::commit();
+
+        return redirect()->route('docs.index')
+            ->with('message', ['type' => 'success', 'message' => 'Document success shared']);
     }
 
     public function destroy(Document $doc)

@@ -11,8 +11,8 @@ class DocumentShare extends Model
 
     protected $fillable = [
         'document_id',
-        'user_id',
-        'share_to',
+        'user_id', //jika email ada usernya
+        'share_to', //email
     ];
 
     public function document()

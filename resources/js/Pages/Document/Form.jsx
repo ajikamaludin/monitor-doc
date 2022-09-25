@@ -20,6 +20,7 @@ export default function FormDocument(props) {
     const [reminders, setReminders] = useState([])
     const { data, setData, post, processing, errors, reset } = useForm({
         no_doc: '',
+        name: '',
         email: '',
         type_doc_id: '1',
         department_id: '1',
@@ -40,6 +41,7 @@ export default function FormDocument(props) {
         if(doc !== undefined) {
             setData({
                 no_doc: doc.no_doc,
+                name: doc.name,
                 email: doc.email,
                 type_doc_id: doc.type_doc_id,
                 department_id: doc.department_id,
@@ -129,6 +131,19 @@ export default function FormDocument(props) {
                                     ))}
                                 </select>
                                 <InputError message={errors.type_doc_id}/>
+                            </div>
+                            <div>
+                                <InputLabel forInput="name" value="Nama Dokumen" />
+                                <TextInput
+                                    type="text"
+                                    name="name"
+                                    value={data.name}
+                                    className="mt-1 block w-full"
+                                    autoComplete={"false"}
+                                    handleChange={onHandleChange}
+                                    isError={errors.name}
+                                />
+                                <InputError message={errors.name}/>
                             </div>
                             <div className='mt-4'>
                                 <InputLabel forInput="company_name" value="Nama Perusahaan" />
@@ -282,14 +297,14 @@ export default function FormDocument(props) {
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
                                     {reminders.map((reminder, index) => (
-                                        <div className='card text-center shadow-md pt-2 pb-4 px-2' key={index}> 
-                                            <div className="card-actions justify-end">
+                                        <div className='card text-center shadow-md pt-2 pb-2 px-2 bg-blue-300' key={index}> 
+                                            <div className='flex'>
+                                                <div  className='flex-1'>
+                                                    {reminder} 
+                                                </div>
                                                 <div className="btn btn-square btn-error btn-xs" onClick={() => handleRemoveReminder(index)}>
                                                     <IconCross/>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                {reminder} 
                                             </div>
                                         </div>
                                     ))}

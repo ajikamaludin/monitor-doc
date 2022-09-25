@@ -6,15 +6,29 @@ import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/inertia-react';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function Dashboard(props) {
     const { count_active, count_update, count_expired, count_total, events } = props
-    console.log(events)
-    const calenderEvents = events.map(e => { return {title: `${e.document.no_doc} - ${e.document.pic_name}`, date: e.date} }) 
+
+    const calenderEvents = events.map(e => { 
+        return {
+            title: `${e.document.type.name} - ${e.document.name}`, 
+            date: e.date, 
+            id : e.id,
+            url: route('docs.show', e.document)
+        } 
+    }) 
+
+    const handleEventClick = (arg) => {
+        // console.log(arg.event)
+    }
 
     const handleDateClick = (arg) => { // bind with an arrow function
+        // apa yang harus di handle: tampilkan saja modal yang ada event pada date ini kemudian bisa tambah reminder atau hapus reminder pada data ini,
+        // untuk tambah reminder pilih form doc id saja kemudian tambah , untuk delete cukup confirm kemudian hilang
         alert(arg.dateStr)
-      }
+    }
 
     return (
         <AuthenticatedLayout
@@ -50,12 +64,12 @@ export default function Dashboard(props) {
                     </div>
                 </div>
             </div>
-            <div className='bg-base-100 mx-8 mt-4 p-2 md:p-4 lg:p-8'>
+            <div className='bg-base-100 mx-2 md:mx-8 mt-4 p-2 md:p-4 lg:p-8 h-auto'>
                 <FullCalendar
                     plugins={[ dayGridPlugin, interactionPlugin ]}
                     initialView="dayGridMonth"
                     dateClick={handleDateClick}
-                    eventClick={(arg) => console.log(arg)}
+                    eventClick={handleEventClick}
                     events={calenderEvents}
                 />
             </div>
