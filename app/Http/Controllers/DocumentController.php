@@ -176,7 +176,7 @@ class DocumentController extends Controller
     {
         return inertia('Document/Detail', [
             'doc' => $doc->load(['department', 'type', 'creator', 'reminders']),
-            'doc_url' => asset('document/'.$doc->document),
+            'doc_url' => asset('documents/'.$doc->document),
         ]);
     }
 
