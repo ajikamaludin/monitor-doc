@@ -276,6 +276,8 @@ class DocumentController extends Controller
 
     public function destroy(Document $doc)
     {
+        $doc->shares()->delete();
+        $doc->reminders()->delete();
         $doc->delete();
         return redirect()->back();
     }
