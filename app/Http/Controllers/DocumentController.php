@@ -190,7 +190,7 @@ class DocumentController extends Controller
     {
         return inertia('Document/Detail', [
             'doc' => $doc->load(['department', 'type', 'creator', 'reminders', 'shares']),
-            'doc_url' => asset('document/'.$doc->document),
+            'doc_url' => asset('documents/'.$doc->document),
         ]);
     }
 
@@ -276,6 +276,8 @@ class DocumentController extends Controller
 
     public function destroy(Document $doc)
     {
+        $doc->shares()->delete();
+        $doc->reminders()->delete();
         $doc->delete();
         return redirect()->back();
     }
