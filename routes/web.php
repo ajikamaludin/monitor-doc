@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/docs/{doc}', [DocumentController::class, 'update'])->name('docs.update');
     Route::get('/docs/{doc}/show', [DocumentController::class, 'show'])->name('docs.show');
     Route::post('/docs/{doc}/share', [DocumentController::class, 'share'])->name('docs.share');
+
+    Route::get('/notification/{notification}', [NotificationController::class, 'redirect'])->name('notification.redirect');
 });
 
 require __DIR__.'/auth.php';

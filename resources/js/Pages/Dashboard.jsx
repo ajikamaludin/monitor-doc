@@ -35,6 +35,7 @@ export default function Dashboard(props) {
             auth={props.auth}
             errors={props.errors}
             flash={props.flash}
+            notify={props.notify}
         >
             <Head title="Dashboard" />
 

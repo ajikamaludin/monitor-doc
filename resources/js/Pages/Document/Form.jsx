@@ -96,6 +96,7 @@ export default function FormDocument(props) {
             auth={props.auth}
             errors={props.errors}
             flash={props.flash}
+            notify={props.notify}
         >
             <Head title="Document - Form" />
 
@@ -276,7 +277,7 @@ export default function FormDocument(props) {
                                     <p className='text-sm'>file saved is found, reupload to replace</p>
                                 )}
                             </div>
-                            <div className='mt-4'>
+                            {/* <div className='mt-4'>
                                 <InputLabel forInput="status" value="Status" />
                                 <select 
                                     className="mt-1 select select-bordered w-full" 
@@ -289,7 +290,7 @@ export default function FormDocument(props) {
                                     ))}
                                 </select>
                                 <InputError message={errors.status}/>
-                            </div>
+                            </div> */}
                             <div className='mt-4'>
                                 <div className='flex flex-row space-x-5 items-center'>
                                     <InputLabel forInput="reminder" value="Reminder" />

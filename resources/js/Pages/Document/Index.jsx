@@ -76,6 +76,7 @@ export default function Document(props) {
             auth={props.auth}
             errors={props.errors}
             flash={props.flash}
+            notify={props.notify}
         >
             <Head title="Document" />
             <div className="flex flex-col w-full sm:px-6 lg:px-8 space-y-2">

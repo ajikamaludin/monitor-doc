@@ -70,7 +70,7 @@ class DocumentController extends Controller
             'first_person_name' => 'required|string',
             'second_person_name' => 'required|string',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:'.$request->start_date,
             'type_doc_id' => 'required|exists:type_docs,id',
             'department_id' => 'required|exists:departments,id',
             'pic_name' => 'required|string',
@@ -98,7 +98,7 @@ class DocumentController extends Controller
             'note' => $request->note,
             'type_doc_id' => $request->type_doc_id,
             'department_id' => $request->department_id,
-            'status' => $request->status,
+            'status' => Document::ACTIVE, //DOCUMENT CREATED ALWAYS ACTIVE
             'user_id' => auth()->user()->id,
         ]);
 
@@ -137,7 +137,7 @@ class DocumentController extends Controller
             'first_person_name' => 'required|string',
             'second_person_name' => 'required|string',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:'.$request->start_date,
             'type_doc_id' => 'required|exists:type_docs,id',
             'department_id' => 'required|exists:departments,id',
             'pic_name' => 'required|string',
@@ -162,7 +162,7 @@ class DocumentController extends Controller
             'note' => $request->note,
             'type_doc_id' => $request->type_doc_id,
             'department_id' => $request->department_id,
-            'status' => $request->status,
+            'status' => Document::UPDATE // DOCUEMENT UPDATED IS ALWAYS UPDATE
         ]);
 
         $file = $request->file('document');

@@ -24,6 +24,7 @@ export default function FormDocument(props) {
             auth={props.auth}
             errors={props.errors}
             flash={props.flash}
+            notify={props.notify}
         >
             <Head title="Document - Form" />
 

@@ -56,6 +56,7 @@ export default function Users(props) {
             auth={props.auth}
             errors={props.errors}
             flash={props.flash}
+            notify={props.notify}
         >
             <Head title="Users" />
             <div className="flex flex-col w-full sm:px-6 lg:px-8 space-y-2">

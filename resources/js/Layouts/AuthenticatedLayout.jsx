@@ -5,8 +5,41 @@ import { ToastContainer, toast } from 'react-toastify'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
 import MenuItem from '@/Components/SidebarMenuItem';
+import { IconBell, IconBellRing } from '@/Icons';
+import { Inertia } from '@inertiajs/inertia';
 
-export default function Authenticated({ auth, children, flash }) {
+const Notification = ({ notifications, hasUnread }) => {
+    const redirect = (item) => {
+        Inertia.get(route('notification.redirect', item))
+    }
+
+    return (
+        <Dropdown>
+            <Dropdown.Trigger>
+                {hasUnread ? (
+                    <IconBellRing color="#37cdbe" />
+                ) : (
+                    <IconBell/>
+                )}  
+            </Dropdown.Trigger>
+            <Dropdown.Content contentClasses='p-1 bg-base-100' width='w-60' maxHeight='600px'>
+                {notifications.map(item => (
+                    <div className='pl-2 py-2 hover:bg-base-200' key={item.id} onClick={() => redirect(item)}>
+                        <div className={`text-sm ${item.status == 0 ? 'font-bold' : ''}`}>{item.content}</div>
+                        <div className='text-xs font-light'>• {item.date}</div>
+                    </div>
+                ))}
+                {+notifications.length === 0 && (
+                    <div className='pl-2 py-2 hover:bg-base-200'>
+                        <div className={`text-sm`}>No Notification Found</div>
+                    </div>
+                )}
+            </Dropdown.Content>
+        </Dropdown>
+    )
+}
+
+export default function Authenticated({ auth, children, flash, notify }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     useEffect(() => {
@@ -36,6 +69,12 @@ export default function Authenticated({ auth, children, flash }) {
 
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
                             <div className="ml-3 relative">
+                                <Notification 
+                                    notifications={notify.notifications} 
+                                    hasUnread={+notify.notification_has_unread > 0 ? true : false}
+                                />
+                            </div>
+                            <div className="ml-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -61,7 +100,7 @@ export default function Authenticated({ auth, children, flash }) {
                                         </span>
                                     </Dropdown.Trigger>
 
-                                    <Dropdown.Content>
+                                    <Dropdown.Content width='w-42'>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
@@ -70,6 +109,12 @@ export default function Authenticated({ auth, children, flash }) {
                             </div>
                         </div>
 
+                        <div className="-mr-20 flex items-center sm:hidden">
+                            <Notification 
+                                notifications={notify.notifications} 
+                                hasUnread={+notify.notification_has_unread > 0 ? true : false}
+                            />
+                        </div>
                         <div className="-mr-2 flex items-center sm:hidden">
                             <button
                                 onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}

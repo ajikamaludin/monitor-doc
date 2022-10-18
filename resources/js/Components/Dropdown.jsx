@@ -30,7 +30,7 @@ const Trigger = ({ children }) => {
     );
 };
 
-const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-base-100', children }) => {
+const Content = ({ align = 'right', width = 'w-48', contentClasses = 'py-1 bg-base-100', maxHeight = '100px', children }) => {
     const { open, setOpen } = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
@@ -41,10 +41,10 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-base
         alignmentClasses = 'origin-top-right right-0';
     }
 
-    let widthClasses = '';
-
-    if (width === '48') {
-        widthClasses = 'w-48';
+    let widthClasses = width;
+    let overflwoAuto = false;
+    if(maxHeight !== '100px') {
+        overflwoAuto = true;
     }
 
     return (
@@ -60,10 +60,13 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-base
                 leaveTo="transform opacity-0 scale-95"
             >
                 <div
-                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${overflwoAuto ? 'overflow-auto' : ''} ${alignmentClasses} ${widthClasses}`}
+                    style={{maxHeight: maxHeight}}
                     onClick={() => setOpen(false)}
                 >
-                    <div className={`rounded-md ring-1 ring-black ring-opacity-5 ` + contentClasses}>{children}</div>
+                    <div className={`rounded-md ring-1 ring-gray-300 ring-opacity-5` + contentClasses}>
+                        {children}
+                    </div>
                 </div>
             </Transition>
         </>
