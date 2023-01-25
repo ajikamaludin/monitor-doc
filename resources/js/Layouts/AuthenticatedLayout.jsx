@@ -1,56 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import Dropdown from '@/Components/Dropdown';
 import { ToastContainer, toast } from 'react-toastify'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import NavItem from '@/Components/NavItem';
 import NavDropdown from '@/Components/NavDropdown';
-import { IconBell, IconBellRing } from '@/Icons';
-import { router } from '@inertiajs/react'
 import { ArrowDownIcon } from '@/Components/Icons';
+import { hasPermission } from '@/utils';
 
-const routes = [
-    {name: "Dashboard", route: "dashboard"},
-    {name: "Dokumen", items: [
-        {name: "Dokumen", route: 'docs.index'},
-        {name: "Ketegori", route: 'docs.index'},
-        {name: "Jenis", route: 'docs.index'},
+const rs = [
+    {name: "Dashboard", route: "dashboard", show: true},
+    {name: "Dokumen", show: true, items: [
+        {name: "Dokumen", route: 'docs.index', show: true, permission: 'view-document'},
+        {name: "Ketegori", route: 'docs.index', show: true, permission: 'view-category'},
+        {name: "Jenis", route: 'docs.index', show: true, permission: 'view-type'},
     ]},
-    {name: "User", route: "users.index"},
+    {name: "User", show: true, items: [
+        {name:"User", route: "users.index", show: true, permission: 'view-user'},
+        {name:"Role", route: "roles.index", show: true, permission: 'view-role'},
+    ]},
 ]
-
-const Notification = ({ notifications, hasUnread }) => {
-    const redirect = (item) => {
-        router.get(route('notification.redirect', item))
-    }
-
-    return (
-        <Dropdown>
-            <Dropdown.Trigger>
-                {hasUnread ? (
-                    <IconBellRing color="#37cdbe" />
-                ) : (
-                    <IconBell/>
-                )}  
-            </Dropdown.Trigger>
-            <Dropdown.Content contentClasses='p-1 bg-base-100' width='w-60' maxHeight='600px'>
-                {notifications.map(item => (
-                    <div className='pl-2 py-2 hover:bg-base-200' key={item.id} onClick={() => redirect(item)}>
-                        <div className={`text-sm ${item.status == 0 ? 'font-bold' : ''}`}>{item.content}</div>
-                        <div className='text-xs font-light'>• {item.date}</div>
-                    </div>
-                ))}
-                {+notifications.length === 0 && (
-                    <div className='pl-2 py-2 hover:bg-base-200'>
-                        <div className={`text-sm`}>No Notification Found</div>
-                    </div>
-                )}
-            </Dropdown.Content>
-        </Dropdown>
-    )
-}
 
 export default function Authenticated({ auth, children, flash, notify }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    const routes = rs.map(r => {
+        if('items' in r) {
+            r.items = r.items.map(ri => {
+                ri.show = hasPermission(ri.permission, auth.user)
+                return ri
+            })
+            if (r.items.filter(r => r.show).length <= 0) {
+                r.show = false
+            } else {
+                r.show = true
+            }
+        }
+        return r
+    })
 
     useEffect(() => {
         if (flash.message !== null) {
@@ -67,12 +52,12 @@ export default function Authenticated({ auth, children, flash, notify }) {
                     </div> 
                     <div className="sm:flex flex-1 px-6 hidden">
                         <div className="flex items-stretch">
-                            {routes.map((item, index) => (
+                            {routes.filter(r => r.show).map((item, index) => (
                                 <div key={index}>
                                     {'items' in item ? (
                                         <NavDropdown
                                             name={item.name}
-                                            items={item.items}
+                                            items={item.items.filter(r => r.show)}
                                         />
                                     ) : (
                                         <NavItem href={route(item.route)}  active={route().current(item.route)}>
@@ -125,11 +110,11 @@ export default function Authenticated({ auth, children, flash, notify }) {
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        {routes.map((item, index) => (
+                        {routes.filter(r => r.show).map((item, index) => (
                             <div key={index}>
                                 {'items' in item ? (
                                     <>
-                                        {item.items.map((i, k) => (
+                                        {item.items.filter(r => r.show).map((i, k) => (
                                             <ResponsiveNavLink href={route(i.route)} active={route().current(i.route)} key={k+i.route}>
                                                 {i.name}
                                             </ResponsiveNavLink>

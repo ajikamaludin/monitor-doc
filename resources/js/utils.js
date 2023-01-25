@@ -29,3 +29,15 @@ export const validateEmail = (email) => {
 export const formatDate = (stringDate) => {
   return moment(stringDate).format('DD-MM-yyyy')
 }
+
+export const hasPermission = (permission, user) => {
+  if (+user.is_admin === 1) {
+    return true;
+  }
+
+  const allowed = user.role.permissions.find(i => i.name === permission)
+  if(allowed) {
+    return true
+  }
+  return false
+}
