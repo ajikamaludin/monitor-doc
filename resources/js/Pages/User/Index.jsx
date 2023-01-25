@@ -96,6 +96,8 @@ export default function Users(props) {
                                         <th>Nama</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Group</th>
+                                        <th>Region</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -106,6 +108,8 @@ export default function Users(props) {
                                             <td>{user.name}</td>
                                             <td>{user.email}</td>
                                             <td>{user?.role?.name}</td>
+                                            <td>{user.group}</td>
+                                            <td>{user.region}</td>
                                             <td className="text-right">
                                                 {canUpdate && (
                                                     <div

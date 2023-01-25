@@ -11,7 +11,9 @@ export default function UserFormModal(props) {
         email: '',
         password: '',
         role_id: '',
-        is_admin: '0'
+        is_admin: '0',
+        group: '',
+        region: ''
     })
 
     const handleOnChange = (event) => {
@@ -55,7 +57,9 @@ export default function UserFormModal(props) {
             name: user?.name,
             email: user?.email,
             role_id: user?.role_id,
-            is_admin: user?.is_admin
+            is_admin: user?.is_admin,
+            group: user?.group,
+            region: user?.region
         })
     }, [user])
 
@@ -129,6 +133,42 @@ export default function UserFormModal(props) {
                         <span className="label-text-alt">
                             {errors.password}
                         </span>
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Group</span>
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="group"
+                        className={`input input-bordered ${
+                            errors.name && 'input-error'
+                        }`}
+                        name="group"
+                        value={data.group}
+                        onChange={handleOnChange}
+                    />
+                    <label className="label">
+                        <span className="label-text-alt">{errors.group}</span>
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Region</span>
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="region"
+                        className={`input input-bordered ${
+                            errors.name && 'input-error'
+                        }`}
+                        name="region"
+                        value={data.region}
+                        onChange={handleOnChange}
+                    />
+                    <label className="label">
+                        <span className="label-text-alt">{errors.region}</span>
                     </label>
                 </div>
                 {(user === null || +user?.is_admin === 0) && (

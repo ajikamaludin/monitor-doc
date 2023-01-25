@@ -46,7 +46,9 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role_id' => $request->role_id
+            'role_id' => $request->role_id,
+            'group' => $request->group,
+            'region' => $request->region
         ]);
 
         return redirect()->route('users.index');
@@ -73,7 +75,7 @@ class UserController extends Controller
             ]);
         }
 
-        $user->update($request->only(['name', 'email', 'role_id']));
+        $user->update($request->only(['name', 'email', 'role_id', 'group', 'region']));
         if ($request->password != null) {
             $user->update(['password' => bcrypt($request->password)]);
         }

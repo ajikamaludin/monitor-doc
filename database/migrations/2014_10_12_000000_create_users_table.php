@@ -20,6 +20,8 @@ return new class extends Migration {
             $table->string('password');
             $table->smallInteger('is_admin')->default(0);
             $table->bigInteger('role_id')->nullable();
+            $table->string('group')->nullable();
+            $table->string('region')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
