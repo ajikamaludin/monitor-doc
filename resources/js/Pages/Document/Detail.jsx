@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Head } from '@inertiajs/inertia-react'
+import { Link, Head } from '@inertiajs/react'
 
 import DocStatusItem from './DocStatusItem'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'

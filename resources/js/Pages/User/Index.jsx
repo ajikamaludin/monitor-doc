@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Head } from '@inertiajs/inertia-react'
-import { Inertia } from '@inertiajs/inertia'
+import { Head } from '@inertiajs/react'
+import { router } from '@inertiajs/react'
 import { usePrevious } from 'react-use'
 import { toast } from 'react-toastify'
 
@@ -32,7 +32,7 @@ export default function Users(props) {
     const onDelete = () => {
         const user = confirmModal.data
         if(user != null) {
-            Inertia.delete(route('users.destroy', user), {
+            router.delete(route('users.destroy', user), {
                 onSuccess: () => toast.success('The Data has been deleted'),
             })
         }
@@ -40,7 +40,7 @@ export default function Users(props) {
 
     useEffect(() => {
         if (preValue) {
-            Inertia.get(
+            router.get(
                 route(route().current()),
                 { q: search },
                 {

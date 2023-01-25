@@ -3,16 +3,16 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import { ToastContainer, toast } from 'react-toastify'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
+import { NavItem, NavDropdown } from '@/Components/NavItem';
 import NavLink from '@/Components/NavLink';
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 import MenuItem from '@/Components/SidebarMenuItem';
 import { IconBell, IconBellRing } from '@/Icons';
-import { Inertia } from '@inertiajs/inertia';
-import { NavDropdown, NavItem } from '@/Components/NavItem';
+import { router } from '@inertiajs/react'
 
 const Notification = ({ notifications, hasUnread }) => {
     const redirect = (item) => {
-        Inertia.get(route('notification.redirect', item))
+        router.get(route('notification.redirect', item))
     }
 
     return (

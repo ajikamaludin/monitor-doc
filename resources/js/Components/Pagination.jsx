@@ -1,4 +1,4 @@
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/react'
 import qs from 'qs'
 
 const PageLink = ({ active, label, url, params }) => {
@@ -8,7 +8,7 @@ const PageLink = ({ active, label, url, params }) => {
     }`
 
     const onClick = () => {
-        Inertia.get(
+        router.get(
             `${url}&${qs.stringify(params)}`,
             {},
             {

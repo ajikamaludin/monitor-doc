@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TextInput from '@/Components/TextInput'
 import { validateEmail } from '@/utils'
 import { toast } from 'react-toastify'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/react'
 
 export default function ModalShare(props) {
     const { isOpen, toggle, modalState } = props
@@ -29,7 +29,7 @@ export default function ModalShare(props) {
             toast.info('please press enter on form email')
             return
         }
-        Inertia.post(route('docs.share', modalState.data), {
+        router.post(route('docs.share', modalState.data), {
             shares: shares
         }, {
             onSuccess: () => toggle()

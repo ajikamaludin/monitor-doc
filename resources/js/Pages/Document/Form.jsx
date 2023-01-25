@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, Head, useForm } from '@inertiajs/inertia-react'
+import { Link, Head, useForm } from '@inertiajs/react'
 import { toast } from 'react-toastify'
 
 import { statuses } from '@/utils'
