@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useForm } from '@inertiajs/inertia-react'
+import { useForm } from '@inertiajs/react'
 import { toast } from 'react-toastify'
 
 export default function UserFormModal(props) {

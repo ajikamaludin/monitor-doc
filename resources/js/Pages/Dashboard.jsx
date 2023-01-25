@@ -5,8 +5,8 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick    
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/inertia-react';
-import { Inertia } from '@inertiajs/inertia';
+import { Head } from '@inertiajs/react';
+import { router } from '@inertiajs/react'
 
 export default function Dashboard(props) {
     const { count_active, count_update, count_expired, count_total, events } = props

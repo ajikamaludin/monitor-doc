@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/react'
 import { statuses } from '@/utils'
 import InputLabel from '@/Components/InputLabel'
 
