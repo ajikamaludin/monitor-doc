@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import { ToastContainer, toast } from 'react-toastify'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { NavItem, NavDropdown } from '@/Components/NavItem';
-import NavLink from '@/Components/NavLink';
-import { Link } from '@inertiajs/react';
-import MenuItem from '@/Components/SidebarMenuItem';
+import NavItem from '@/Components/NavItem';
+import NavDropdown from '@/Components/NavDropdown';
 import { IconBell, IconBellRing } from '@/Icons';
 import { router } from '@inertiajs/react'
+import { ArrowDownIcon } from '@/Components/Icons';
+
+const routes = [
+    {name: "Dashboard", route: "dashboard"},
+    {name: "Dokumen", items: [
+        {name: "Dokumen", route: 'docs.index'},
+        {name: "Ketegori", route: 'docs.index'},
+        {name: "Jenis", route: 'docs.index'},
+    ]},
+    {name: "User", route: "users.index"},
+]
 
 const Notification = ({ notifications, hasUnread }) => {
     const redirect = (item) => {
@@ -59,23 +67,36 @@ export default function Authenticated({ auth, children, flash, notify }) {
                     </div> 
                     <div className="sm:flex flex-1 px-6 hidden">
                         <div className="flex items-stretch">
-                            <NavItem href={route("dashboard")}  active={route().current('dashboard')}>
-                                Dashboard
-                            </NavItem>
-                           <NavDropdown
-                            name="Dokumen"
-                            items={[
-                                {label: "Dokumen", route: 'docs.index'},
-                                {label: "User", route: 'users.index'},
-                            ]}
-                           ></NavDropdown>
-                            <NavItem href={route("users.index")}  active={route().current('users.*')}>
-                                User
-                            </NavItem>
+                            {routes.map((item, index) => (
+                                <div key={index}>
+                                    {'items' in item ? (
+                                        <NavDropdown
+                                            name={item.name}
+                                            items={item.items}
+                                        />
+                                    ) : (
+                                        <NavItem href={route(item.route)}  active={route().current(item.route)}>
+                                            {item.name}
+                                        </NavItem>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className="sm:flex justify-end flex-1 px-2 hidden">
-                        {auth.user.name}
+                        <div className="dropdown dropdown-end">
+                            <label tabIndex={0} className="btn btn-ghost gap-2 m-1 normal-case">
+                                {auth.user.name}
+                                <ArrowDownIcon/>
+                            </label>
+                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                <li>
+                                    <ResponsiveNavLink method="post" href={route('logout')} as="button">
+                                        Log Out
+                                    </ResponsiveNavLink>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div className="flex-1 justify-end items-center sm:hidden">
                         <button
@@ -102,18 +123,25 @@ export default function Authenticated({ auth, children, flash, notify }) {
                     </div>
                 </div>
 
-                
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('docs.index')} active={route().current('docs.*')}>
-                            Monitoring
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('users.index')} active={route().current('users.*')}>
-                            Users
-                        </ResponsiveNavLink>
+                        {routes.map((item, index) => (
+                            <div key={index}>
+                                {'items' in item ? (
+                                    <>
+                                        {item.items.map((i, k) => (
+                                            <ResponsiveNavLink href={route(i.route)} active={route().current(i.route)} key={k+i.route}>
+                                                {i.name}
+                                            </ResponsiveNavLink>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <ResponsiveNavLink href={route(item.route)} active={route().current(item.route)}>
+                                        {item.name}
+                                    </ResponsiveNavLink>
+                                )}
+                            </div>
+                        ))}
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
