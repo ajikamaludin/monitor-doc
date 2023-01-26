@@ -14,22 +14,22 @@ return new class extends Migration {
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->integer('no', false);
-            $table->string('name');
-            $table->string('no_doc');
-            $table->foreignId('type_doc_id')->constrained();
-            $table->string('company_name');
-            $table->string('first_person_name');
-            $table->string('second_person_name');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
-            $table->foreignId('department_id')->constrained();
-            $table->string('pic_name');
-            $table->string('email');
-            $table->text('note');
-            $table->string('document');
-            $table->foreignId('user_id')->constrained();
-            $table->smallInteger('status')->default(0);
+            $table->string("no")->nullable();
+            $table->string("no_doc")->nullable();
+            $table->string("name")->nullable();
+            $table->string("company_name")->nullable();
+            $table->foreignId("type_id")->constrained(); //select jenis
+            $table->foreignId("category_id")->constrained(); //select
+            $table->string("publisher")->nullable();
+            $table->text("description")->nullable();
+            $table->timestamp("publish_date")->nullable();
+            $table->timestamp("due_date")->nullable(); //for reminder
+            $table->smallInteger("status")->default(1); //only 1 yes/ 0no 
+            $table->smallInteger("type")->default(1); //only 1 tetap/ 0tidak tetap 
+            $table->string("group")->nullable();
+            $table->string("region")->nullable();
+            $table->string("document")->nullable();
+            $table->foreignId("user_id")->constrained();
             $table->timestamps();
         });
     }

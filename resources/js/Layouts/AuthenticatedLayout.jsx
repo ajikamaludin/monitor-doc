@@ -10,8 +10,8 @@ const rs = [
     {name: "Dashboard", route: "dashboard", show: true},
     {name: "Dokumen", show: true, items: [
         {name: "Dokumen", route: 'docs.index', show: true, permission: 'view-document'},
-        {name: "Ketegori", route: 'docs.index', show: true, permission: 'view-category'},
-        {name: "Jenis", route: 'docs.index', show: true, permission: 'view-type'},
+        {name: "Ketegori", route: 'categories.index', show: true, permission: 'view-category'},
+        {name: "Jenis", route: 'types.index', show: true, permission: 'view-type'},
     ]},
     {name: "User", show: true, items: [
         {name:"User", route: "users.index", show: true, permission: 'view-user'},
@@ -51,7 +51,7 @@ export default function Authenticated({ auth, children, flash, notify }) {
                         <a className="text-xl font-bold">Monitor Doc</a>
                     </div> 
                     <div className="sm:flex flex-1 px-6 hidden">
-                        <div className="flex items-stretch">
+                        <div className="flex items-stretch gap-2">
                             {routes.filter(r => r.show).map((item, index) => (
                                 <div key={index}>
                                     {'items' in item ? (

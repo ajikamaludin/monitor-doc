@@ -11,10 +11,10 @@ class GeneralController extends Controller
     public function index()
     {
         return inertia('Dashboard', [
-            'count_active' => Document::where('status', Document::ACTIVE)->count(),
-            'count_update' => Document::where('status', Document::UPDATE)->count(),
-            'count_expired' => Document::where('status', Document::EXPIRED)->count(),
-            'count_total' => Document::count(),
+            'count_active' => 0,
+            'count_update' => 0,
+            'count_expired' => 0,
+            'count_total' => 0,
             'events' => DocumentReminder::with('document.type')->get(),
         ]);
     }
