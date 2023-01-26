@@ -44,7 +44,7 @@ class Document extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function type()
+    public function variety()
     {
         return $this->belongsTo(Type::class, 'type_id');
     }

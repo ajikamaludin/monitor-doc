@@ -87,18 +87,31 @@ export default function FormDocument(props) {
                         <p className='font-bold text-2xl mb-4'>Dokumen</p>
                         <div className="overflow-x-auto">
                         <form onSubmit={submit}>
-                            <div>
-                                <InputLabel forInput="no_doc" value="No Dokumen" />
+                        <div className='mt-4'>
+                                <InputLabel forInput="region" value="Region" />
                                 <TextInput
                                     type="text"
-                                    name="no_doc"
-                                    value={data.no_doc}
+                                    name="region"
+                                    value={data.region}
                                     className="mt-1 block w-full"
                                     autoComplete={"false"}
                                     handleChange={onHandleChange}
-                                    isError={errors.no_doc}
+                                    isError={errors.region}
                                 />
-                                <InputError message={errors.no_doc}/>
+                                <InputError message={errors.region}/>
+                            </div>
+                            <div className='mt-4'>
+                                <InputLabel forInput="group" value="Group" />
+                                <TextInput
+                                    type="text"
+                                    name="group"
+                                    value={data.group}
+                                    className="mt-1 block w-full"
+                                    autoComplete={"false"}
+                                    handleChange={onHandleChange}
+                                    isError={errors.group}
+                                />
+                                <InputError message={errors.group}/>
                             </div>
                             <div className='mt-4 pl-1'>
                                 <InputLabel forInput="type" value="Jenis" />
@@ -129,6 +142,19 @@ export default function FormDocument(props) {
                                     ))}
                                 </select>
                                 <InputError message={errors.category_id}/>
+                            </div>
+                            <div className='mt-4'>
+                                <InputLabel forInput="no_doc" value="No Dokumen" />
+                                <TextInput
+                                    type="text"
+                                    name="no_doc"
+                                    value={data.no_doc}
+                                    className="mt-1 block w-full"
+                                    autoComplete={"false"}
+                                    handleChange={onHandleChange}
+                                    isError={errors.no_doc}
+                                />
+                                <InputError message={errors.no_doc}/>
                             </div>
                             <div className='mt-4'>
                                 <InputLabel forInput="name" value="Nama Dokumen" />
@@ -246,32 +272,7 @@ export default function FormDocument(props) {
                                     </label>
                                 </div>
                             </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="region" value="Region" />
-                                <TextInput
-                                    type="text"
-                                    name="region"
-                                    value={data.region}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.region}
-                                />
-                                <InputError message={errors.region}/>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="group" value="Group" />
-                                <TextInput
-                                    type="text"
-                                    name="group"
-                                    value={data.group}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.group}
-                                />
-                                <InputError message={errors.group}/>
-                            </div>
+                            
                             <div className="flex items-center justify-between mt-4">
                                 <PrimaryButton processing={processing}>
                                     Simpan
