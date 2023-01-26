@@ -9,6 +9,12 @@ class Document extends Model
 {
     use HasFactory;
 
+    const STATUS_YES = 1;
+    const STATUS_NO = 0;
+
+    const TYPE_TETAP = 1;
+    const TYPE_TIDAK_TETAP = 0;
+
     protected $fillable = [
         "no",
         "no_doc",
@@ -36,5 +42,15 @@ class Document extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

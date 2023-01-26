@@ -8,11 +8,8 @@ import { useModalState } from '@/Hooks'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Pagination from '@/Components/Pagination'
 import ModalConfirm from '@/Components/ModalConfirm'
-import ModalFilter from './ModalFilter'
-import ModalShare from './ModalShare'
-import DocStatusItem from './DocStatusItem'
-import { IconFilter, IconMenu } from '@/Icons'
-import { formatDate } from '@/utils'
+import { IconMenu } from '@/Icons'
+import { formatDate, hasPermission } from '@/utils'
 
 export default function Document(props) {
     const { types, departments } = props
@@ -36,18 +33,11 @@ export default function Document(props) {
         }
     }
 
-    const filterModal = useModalState(false)
     const handleFilter = (filter) => {
         setSearch({
             ...search,
             ...filter,
         })
-    }
-
-    const shareModal = useModalState(false)
-    const handleShare = (doc) => {
-        shareModal.setData(doc)
-        shareModal.toggle()
     }
 
     const sort = (key) => {
@@ -71,6 +61,10 @@ export default function Document(props) {
         }
     }, [search])
 
+    const canCreate = hasPermission('create-document', props.auth.user)
+    const canUpdate = hasPermission('update-document', props.auth.user)
+    const canDelete = hasPermission('delete-document', props.auth.user)
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -83,12 +77,14 @@ export default function Document(props) {
                 <div className="card bg-base-100 w-full">
                     <div className="card-body">
                         <div className="flex flex-col md:flex-row w-full mb-4 justify-between space-y-1 md:space-y-0">
-                            <Link
-                                className="btn btn-neutral"
-                                href={route('docs.create')}
-                            >
-                                Tambah
-                            </Link>
+                            {canCreate && (
+                                <Link
+                                    className="btn btn-neutral"
+                                    href={route('docs.create')}
+                                >
+                                    Tambah
+                                </Link>
+                            )}
                             <div className='flex flex-row'>
                                 <div className="form-control w-full">
                                     <input
@@ -101,22 +97,18 @@ export default function Document(props) {
                                         placeholder="Search"
                                     />
                                 </div>
-                                <div className='tooltip'  data-tip="filter status etc">
-                                    <div className='btn btn-outline' onClick={() => filterModal.toggle()}>
-                                        <IconFilter/>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div className="overflow-x-auto pb-44">
                             <table className="table w-full table-zebra">
                                 <thead>
                                     <tr>
-                                        <th className='hover:underline' onClick={() => sort('type_doc_id')}>Jenis</th>
+                                        <th className='hover:underline' onClick={() => sort('type_id')}>Jenis</th>
+                                        <th className='hover:underline' onClick={() => sort('category_id')}>Ketegori</th>
+                                        <th>No Dokumen</th>
                                         <th>Nama Dokumen</th>
-                                        <th>Nama PIC</th>
-                                        <th className='hover:underline' onClick={() => sort('end_date')}>Tanggal Berakhir</th>
-                                        <th className='hover:underline' onClick={() => sort('status')}>Status</th>
+                                        <th className='hover:underline' onClick={() => sort('due_date')}>Tanggal Berakhir</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -124,10 +116,11 @@ export default function Document(props) {
                                     {docs?.map((doc) => (
                                         <tr key={doc.id}>
                                             <td>{doc.type.name}</td>
+                                            <td>{doc.category.name}</td>
+                                            <td>{doc.no_doc}</td>
                                             <td>{doc.name}</td>
-                                            <td>{doc.pic_name}</td>
-                                            <td>{formatDate(doc.end_date)}</td>
-                                            <td><DocStatusItem status={doc.status}/></td>
+                                            <td>{formatDate(doc.due_date)}</td>
+                                            <th>Status</th>
                                             <td className='text-right'>
                                                 <div className="dropdown dropdown-left">
                                                     <label tabIndex={0} className="btn btn-sm m-1 px-1"><IconMenu/></label>
@@ -135,15 +128,16 @@ export default function Document(props) {
                                                         <li>
                                                             <Link href={route('docs.show', doc)}>Detail</Link>
                                                         </li>
-                                                        <li onClick={() => handleShare(doc)}>
-                                                            <div>Share</div>
-                                                        </li>
-                                                        <li>
-                                                            <Link href={route('docs.edit', doc)}>Edit</Link>
-                                                        </li>
-                                                        <li onClick={() => handleDelete(doc)} className="bg-error ">
-                                                            <div>Delete</div>
-                                                        </li>
+                                                        {canUpdate && (
+                                                            <li>
+                                                                <Link href={route('docs.edit', doc)}>Edit</Link>
+                                                            </li>
+                                                        )}
+                                                        {canDelete && (
+                                                            <li onClick={() => handleDelete(doc)} className="bg-error ">
+                                                                <div>Delete</div>
+                                                            </li>
+                                                        )}
                                                     </ul>
                                                 </div>
                                             </td>
@@ -162,19 +156,6 @@ export default function Document(props) {
                 isOpen={confirmModal.isOpen}
                 toggle={confirmModal.toggle}
                 onConfirm={onDelete}
-            />
-            <ModalFilter
-                isOpen={filterModal.isOpen}
-                toggle={filterModal.toggle}
-                filter={search}
-                types={types}
-                departments={departments}
-                handleSetFilter={handleFilter}
-            />
-            <ModalShare
-                isOpen={shareModal.isOpen}
-                toggle={shareModal.toggle}
-                modalState={shareModal}
             />
         </AuthenticatedLayout>
     )
