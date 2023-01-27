@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Department;
 use App\Models\Permission;
+use App\Models\Setting;
 use App\Models\TypeDoc;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -56,6 +57,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'update-user', 'label' => 'Edit User'],
             ['name' => 'create-user', 'label' => 'Buat User'],
             ['name' => 'delete-user', 'label' => 'Hapus User'],
+            ['name' => 'view-setting', 'label' => 'Setting'],
         ];
 
         foreach ($permissions as $permission) {
@@ -70,6 +72,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => bcrypt('password'),
             'is_admin' => 1, // admin user
+        ]);
+
+        Setting::create([
+            'key' => 'DESTINATION_MAIL',
+            'value' => 'aji19kamaludin@gmail.com'
         ]);
     }
 }

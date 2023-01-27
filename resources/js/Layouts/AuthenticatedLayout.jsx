@@ -17,6 +17,7 @@ const rs = [
         {name:"User", route: "users.index", show: true, permission: 'view-user'},
         {name:"Role", route: "roles.index", show: true, permission: 'view-role'},
     ]},
+    {name: "Setting", route: "setting.index", show: true, permission: 'view-setting'},
 ]
 
 export default function Authenticated({ auth, children, flash, notify }) {
