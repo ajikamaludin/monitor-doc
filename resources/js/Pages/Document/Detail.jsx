@@ -177,6 +177,17 @@ export default function FormDocument(props) {
                                         </label>
                                     </div>
                                 </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="due_status" value="Catatan" />
+                                    <TextInput
+                                        type="text"
+                                        name="due_status"
+                                        value={doc.due_status}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
                                 <div className="flex items-center justify-between mt-4">
                                     <div className='flex flex-row space-x-1'>
                                         <Link href={route('docs.edit', doc)} className="btn btn-outline">

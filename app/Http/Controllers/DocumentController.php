@@ -2,18 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\DocumentShare;
 use App\Models\Category;
-use App\Models\Department;
 use App\Models\Document;
 use App\Models\Type;
-use App\Models\TypeDoc;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
-use Rap2hpoutre\FastExcel\FastExcel;
 
 class DocumentController extends Controller
 {
@@ -38,6 +30,8 @@ class DocumentController extends Controller
 
         return inertia('Document/Index', [
             'docs' => $query->paginate(10),
+            'now' => now()->timezone('UTC'),
+            'now2' => now()->toDateTimeString(),
         ]);
     }
 
@@ -52,15 +46,15 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "no_doc" => "required|string",
+            "no_doc" => "nullable|string",
             "name" => "required|string",
             "company_name" => "required|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
             "description" => "nullable",
-            "publish_date" => "required|date",
-            "due_date" => "required_if:type,1",
+            "publish_date" => "nullable|date",
+            "due_date" => "required_if:type,0",
             "status" => "required|in:0,1",
             "type" => "required|in:0,1",
             "group" => "required|string",
@@ -68,9 +62,16 @@ class DocumentController extends Controller
             "document" => "required|file",
         ]);
 
-        if($request->publish_date == Document::TYPE_TETAP) {
+        if($request->type == Document::TYPE_TIDAK_TETAP) {
             $request->validate([
                 "due_date" => "date|after_or_equal:".$request->publish_date
+            ]);
+        }
+
+        if($request->status == Document::STATUS_YES) {
+            $request->validate([
+                "no_doc" => "required|string",
+                "publish_date" => "required|date",
             ]);
         }
 
@@ -114,14 +115,14 @@ class DocumentController extends Controller
     public function update(Request $request, Document $doc)
     {
         $request->validate([
-            "no_doc" => "required|string",
+            "no_doc" => "nullable|string",
             "name" => "required|string",
             "company_name" => "required|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
             "description" => "nullable",
-            "publish_date" => "required|date",
+            "publish_date" => "nullable|date",
             "due_date" => "required_if:type,1",
             "status" => "required|in:0,1",
             "type" => "required|in:0,1",
@@ -130,9 +131,16 @@ class DocumentController extends Controller
             "document" => "nullable|file",
         ]);
 
-        if($request->publish_date == Document::TYPE_TETAP) {
+        if($request->type == Document::TYPE_TETAP) {
             $request->validate([
                 "due_date" => "date|after_or_equal:".$request->publish_date
+            ]);
+        }
+
+        if($request->status == Document::STATUS_YES) {
+            $request->validate([
+                "no_doc" => "required|string",
+                "publish_date" => "required|date",
             ]);
         }
 

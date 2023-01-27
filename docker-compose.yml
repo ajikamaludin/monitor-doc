@@ -13,6 +13,8 @@ services:
       volumes:
         - ./:/var/www
         - ./user.ini:/usr/local/etc/php/php.ini
+        - "/etc/timezone:/etc/timezone:ro"
+        - "/etc/localtime:/etc/localtime:ro"
       networks:
         - monitordoc
   nginx:

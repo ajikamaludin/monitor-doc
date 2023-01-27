@@ -108,7 +108,7 @@ export default function Document(props) {
                                         <th>No Dokumen</th>
                                         <th>Nama Dokumen</th>
                                         <th className='hover:underline' onClick={() => sort('due_date')}>Tanggal Berakhir</th>
-                                        <th>Status</th>
+                                        <th>Catatan</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -119,8 +119,10 @@ export default function Document(props) {
                                             <td>{doc.category.name}</td>
                                             <td>{doc.no_doc}</td>
                                             <td>{doc.name}</td>
-                                            <td>{formatDate(doc.due_date)}</td>
-                                            <th>Status</th>
+                                            <td>
+                                                {doc.due_date !== null ? formatDate(doc.due_date) : ''}
+                                            </td>
+                                            <th>{doc.due_status}</th>
                                             <td className='text-right'>
                                                 <div className="dropdown dropdown-left">
                                                     <label tabIndex={0} className="btn btn-sm m-1 px-1"><IconMenu/></label>

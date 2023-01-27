@@ -11,14 +11,14 @@ import { router } from '@inertiajs/react'
 export default function Dashboard(props) {
     const { count_active, count_update, count_expired, count_total, events } = props
 
-    const calenderEvents = events.map(e => { 
-        return {
-            title: `${e.document.type.name} - ${e.document.name}`, 
-            date: e.date, 
-            id : e.id,
-            url: route('docs.show', e.document)
-        } 
-    }) 
+    // const calenderEvents = events.map(e => { 
+    //     return {
+    //         title: `${e.document.type.name} - ${e.document.name}`, 
+    //         date: e.date, 
+    //         id : e.id,
+    //         url: route('docs.show', e.document)
+    //     } 
+    // }) 
 
     const handleEventClick = (arg) => {
         // console.log(arg.event)
@@ -40,19 +40,19 @@ export default function Dashboard(props) {
             <Head title="Dashboard" />
 
             <div className='mx-auto px-2 md:px-4 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1'>
-                <div className="stats bg-base-100 shadow-md w-full">
+                <div className="stats bg-base-100 shadow-md w-full overflow-hidden">
                     <div className="stat">
-                        <div className="stat-title">Dokumen Aktif</div> 
+                        <div className="stat-title">Dokumen Mendekati Jatuh Tempo</div> 
                         <div className="stat-value">{count_active}</div> 
                     </div>
                 </div>
-                <div className="stats bg-base-100 shadow-md w-full">
+                <div className="stats bg-base-100 shadow-md w-full overflow-hidden">
                     <div className="stat">
-                        <div className="stat-title">Dokumen Diperbarui</div> 
+                        <div className="stat-title">Dokumen Jatuh Tempo</div> 
                         <div className="stat-value">{count_update}</div> 
                     </div>
                 </div>
-                <div className="stats bg-base-100 shadow-md w-full">
+                {/* <div className="stats bg-base-100 shadow-md w-full">
                     <div className="stat">
                         <div className="stat-title">Dokumen Berakhir</div> 
                         <div className="stat-value">{count_expired}</div> 
@@ -63,9 +63,9 @@ export default function Dashboard(props) {
                         <div className="stat-title">Total Dokumen</div> 
                         <div className="stat-value">{count_total}</div> 
                     </div>
-                </div>
+                </div> */}
             </div>
-            <div className='bg-base-100 mx-2 md:mx-8 mt-4 p-2 md:p-4 lg:p-8 h-auto'>
+            {/* <div className='bg-base-100 mx-2 md:mx-8 mt-4 p-2 md:p-4 lg:p-8 h-auto'>
                 <FullCalendar
                     plugins={[ dayGridPlugin, interactionPlugin ]}
                     initialView="dayGridMonth"
@@ -73,7 +73,7 @@ export default function Dashboard(props) {
                     eventClick={handleEventClick}
                     events={calenderEvents}
                 />
-            </div>
+            </div> */}
         </AuthenticatedLayout>
     );
 }

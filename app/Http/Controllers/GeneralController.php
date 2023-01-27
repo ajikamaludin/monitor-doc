@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Document;
-use App\Models\DocumentReminder;
-use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
     public function index()
     {
+        $count = 0;
+        $categories = Category::all();
+        foreach($categories as $category) {
+            foreach($category->documents as $docs) {
+                if ($docs->is_close_due != 0) {
+                    $count += 1;
+                }
+            }
+        }
+
         return inertia('Dashboard', [
-            'count_active' => 0,
-            'count_update' => 0,
-            'count_expired' => 0,
-            'count_total' => 0,
-            'events' => DocumentReminder::with('document.type')->get(),
+            'count_active' => $count,
+            'count_update' => Document::whereDate('due_date', '<', now()->toDateString())->count(),
         ]);
     }
 }

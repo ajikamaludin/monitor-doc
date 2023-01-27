@@ -14,4 +14,9 @@ class Category extends Model
         "short",
         "duration",
     ];
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Document extends Model
 {
@@ -39,6 +41,8 @@ class Document extends Model
         'due_date' => 'datetime:Y-m-d'
     ];
 
+    protected $appends = ['due_status'];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -52,5 +56,58 @@ class Document extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    protected function dueStatus(): Attribute
+    {
+        return Attribute::make(
+            get: function() {
+                $diff = $this->category->duration;
+
+                if ($this->due_date == null) {
+                    return '';
+                }
+                if (now()->toDateString() == $this->due_date->toDateString()) {
+                    return "hari ini jatuh tempo";
+                }
+
+                $date = now()->diffInDays($this->due_date, false) + 1;
+
+                if ($diff >= $date && $date > 0) {
+                    return $date . " hari mendekati jatuh tempo";
+                }
+                if ($date <= 0) {
+                    return "jatuh tempo";
+                }
+            },
+        );
+    }
+
+    protected function isCloseDue(): Attribute
+    {
+        return Attribute::make(
+            get: function() {
+                $diff = $this->category->duration;
+
+                if ($this->due_date == null) {
+                    return 0;
+                }
+
+                if (now()->toDateString() == $this->due_date->toDateString()) {
+                    return 0;
+                }
+
+                $date = now()->diffInDays($this->due_date, false) + 1;
+
+                if ($diff >= $date && $date > 0) {
+                    return $date;
+                }
+                if ($date <= 0) {
+                    return 0;
+                }
+
+                return 0;
+            },
+        );
     }
 }

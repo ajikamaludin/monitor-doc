@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Category;
 use App\Models\Document;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,10 +18,7 @@ class DocumentNotification extends Mailable
      *
      * @return void
      */
-    public function __construct(
-        public Document $doc
-    ) {
-    }
+    public function __construct() {}
 
     /**
      * Build the message.
@@ -29,9 +27,19 @@ class DocumentNotification extends Mailable
      */
     public function build()
     {
+        $docs = collect();
+        $categories = Category::all();
+        foreach($categories as $category) {
+            foreach($category->documents()->get() as $doc) {
+                if ($doc->is_close_due != 0) {
+                    $docs->add($doc); 
+                }
+            }
+        }
+
         return $this->markdown('emails.document.notification', [
-            'doc' => $this->doc->load(['type']),
-            'url' => route('docs.show', $this->doc->id)
+            'documents' => $docs,
+            'dueDocuments' => Document::whereDate('due_date', '<', now()->toDateString())->get()
         ]);
     }
 }

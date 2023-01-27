@@ -4,6 +4,10 @@ FROM php:8.1-fpm
 ARG user
 ARG uid
 
+ENV TZ=Asia/Jakarta
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
