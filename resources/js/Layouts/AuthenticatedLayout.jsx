@@ -24,6 +24,9 @@ export default function Authenticated({ auth, children, flash, notify }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     const routes = rs.map(r => {
+        if ('permission' in r ) {
+            r.show = hasPermission(r.permission, auth.user)
+        }
         if('items' in r) {
             r.items = r.items.map(ri => {
                 ri.show = hasPermission(ri.permission, auth.user)
