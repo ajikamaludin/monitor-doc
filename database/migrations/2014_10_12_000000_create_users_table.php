@@ -19,6 +19,10 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->smallInteger('is_admin')->default(0);
+            $table->bigInteger('role_id')->nullable();
+            // $table->string('group')->nullable();
+            // $table->string('region')->nullable();
+            $table->bigInteger("company_id")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

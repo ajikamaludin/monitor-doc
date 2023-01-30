@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::orderBy('id');
+        $query = User::with('role')->orderBy('id');
 
         if ($request->q != null) {
             $query->where('name', 'like', '%'.$request->q.'%');
@@ -22,6 +23,7 @@ class UserController extends Controller
 
         return inertia('User/Index', [
             'users' => $query->paginate(10),
+            'roles' => Role::all(),
         ]);
     }
 
@@ -37,12 +39,16 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
+            'role_id' => 'required|exists:roles,id'
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'role_id' => $request->role_id,
+            'group' => $request->group,
+            'region' => $request->region
         ]);
 
         return redirect()->route('users.index');
@@ -63,7 +69,13 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6',
         ]);
 
-        $user->update($request->only(['name', 'email']));
+        if ($user->is_admin == 0) {
+            $request->validate([
+                'role_id' => 'required|exists:roles,id'
+            ]);
+        }
+
+        $user->update($request->only(['name', 'email', 'role_id', 'group', 'region']));
         if ($request->password != null) {
             $user->update(['password' => bcrypt($request->password)]);
         }

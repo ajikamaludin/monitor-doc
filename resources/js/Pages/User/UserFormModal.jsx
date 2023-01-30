@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react'
-import { useForm } from '@inertiajs/react'
+import { useForm, usePage } from '@inertiajs/react'
 import { toast } from 'react-toastify'
 
 export default function UserFormModal(props) {
     const { isOpen, toggle = () => {} , user = null } = props
+    const { props: { roles }} = usePage()
 
     const { data, setData, post, put, processing, errors, reset, clearErrors } = useForm({
         name: '',
         email: '',
         password: '',
+        role_id: '',
+        is_admin: '0',
+        group: '',
+        region: ''
     })
 
     const handleOnChange = (event) => {
@@ -51,6 +56,10 @@ export default function UserFormModal(props) {
         setData({
             name: user?.name,
             email: user?.email,
+            role_id: user?.role_id,
+            is_admin: user?.is_admin,
+            group: user?.group,
+            region: user?.region
         })
     }, [user])
 
@@ -60,11 +69,11 @@ export default function UserFormModal(props) {
             style={
                 isOpen
                     ? {
-                          opacity: 1,
-                          pointerEvents: 'auto',
-                          visibility: 'visible',
-                          overflowY: 'initial',
-                      }
+                        opacity: 1,
+                        pointerEvents: 'auto',
+                        visibility: 'visible',
+                        overflowY: 'initial',
+                    }
                     : {}
             }
         >
@@ -126,6 +135,67 @@ export default function UserFormModal(props) {
                         </span>
                     </label>
                 </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Group</span>
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="group"
+                        className={`input input-bordered ${
+                            errors.name && 'input-error'
+                        }`}
+                        name="group"
+                        value={data.group}
+                        onChange={handleOnChange}
+                    />
+                    <label className="label">
+                        <span className="label-text-alt">{errors.group}</span>
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Region</span>
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="region"
+                        className={`input input-bordered ${
+                            errors.name && 'input-error'
+                        }`}
+                        name="region"
+                        value={data.region}
+                        onChange={handleOnChange}
+                    />
+                    <label className="label">
+                        <span className="label-text-alt">{errors.region}</span>
+                    </label>
+                </div>
+                {(user === null || +user?.is_admin === 0) && (
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Role</span>
+                        </label>
+                        <select 
+                            className={`select select-bordered w-full ${
+                                errors.role_id && 'select-error'
+                            }`}
+                            name='role_id' 
+                            value={data.role_id}
+                            onChange={handleOnChange}
+                        >
+                            <option disabled value=""></option>
+                            {roles.map(role => (
+                                <option key={role.id} value={role.id}>{role.name}</option>
+                            ))}
+                        </select>
+                        <label className="label">
+                            <span className="label-text-alt">
+                                {errors.role_id}
+                            </span>
+                        </label>
+                    </div>
+                )}
                 <div className="modal-action">
                     <div
                         onClick={handleSubmit}

@@ -6,18 +6,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import InputLabel from '@/Components/InputLabel'
 import TextInput from '@/Components/TextInput'
 import { formatDate } from '@/utils'
-import ModalShare from './ModalShare'
 import { useModalState } from '@/Hooks'
 
 
 export default function FormDocument(props) {
     const { doc, doc_url }= props
-
-    const shareModal = useModalState(false)
-    const handleShare = (doc) => {
-        shareModal.setData(doc)
-        shareModal.toggle()
-    }
 
     return (
         <AuthenticatedLayout
@@ -33,173 +26,183 @@ export default function FormDocument(props) {
                     <div className="card-body">
                         <p className='font-bold text-2xl mb-4'>Dokumen</p>
                         <div className="overflow-x-auto">
-                        <div>
                             <div>
-                                <InputLabel forInput="no_doc" value="No Dokumen" />
-                                <TextInput
-                                    type="text"
-                                    name="no_doc"
-                                    value={doc.no_doc}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="type" value="Jenis" />
-                                <TextInput
-                                    type="text"
-                                    name="no_doc"
-                                    value={doc.type.name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="company_name" value="Nama Perusahaan" />
-                                <TextInput
-                                    type="text"
-                                    name="company_name"
-                                    value={doc.company_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="first_person_name" value="Nama Pihak Pertama" />
-                                <TextInput
-                                    type="text"
-                                    name="first_person_name"
-                                    value={doc.first_person_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="second_person_name" value="Nama Pihak Kedua" />
-                                <TextInput
-                                    type="text"
-                                    name="second_person_name"
-                                    value={doc.second_person_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="start_date" value="Tanggal Mulai" />
-                                <TextInput
-                                    type="text"
-                                    name="start_date"
-                                    value={formatDate(doc.start_date)}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="end_date" value="Tanggal Berakhir" />
-                                <TextInput
-                                    type="text"
-                                    name="end_date"
-                                    value={formatDate(doc.end_date)}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-
-                            <div className='mt-4'>
-                                <InputLabel forInput="type" value="Deparment" />
-                                <TextInput
-                                    type="text"
-                                    name="type"
-                                    value={doc.department.name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="pic_name" value="Nama PIC" />
-                                <TextInput
-                                    type="text"
-                                    name="pic_name"
-                                    value={doc.pic_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="email" value="Email" />
-                                <TextInput
-                                    type="text"
-                                    name="email"
-                                    value={doc.email}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="note" value="Catatan" />
-                                <TextInput
-                                    type="textarea"
-                                    name="note"
-                                    value={doc.note}
-                                    className="mt-1 block w-full"
-                                    readOnly={true}
-                                />
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="document" value="Dokumen" />
-                                <a href={doc_url} className='btn btn-outline'>Download</a>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="status" value="Status" />
-                                <DocStatusItem status={doc.status}/>
-                            </div>
-                            <div className='mt-4'>
-                                <div className='flex flex-row space-x-5 items-center'>
-                                    <InputLabel forInput="reminder" value="Reminder" />
+                                <div className='mt-4'>
+                                    <InputLabel forInput="region" value="Region" />
+                                    <TextInput
+                                        type="text"
+                                        name="region"
+                                        value={doc.region}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
                                 </div>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
-                                    {doc.reminders.map((reminder, index) => (
-                                        <div className='card text-center shadow-md pt-2 pb-2 px-2 bg-blue-300' key={index}> 
-                                            <div>
-                                                {reminder.date} 
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className='mt-4'>
+                                    <InputLabel forInput="group" value="Group" />
+                                    <TextInput
+                                        type="text"
+                                        name="group"
+                                        value={doc.group}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
                                 </div>
-                            </div>
-                            <div className="flex items-center justify-between mt-4">
-                                <div className='flex flex-row space-x-1'>
-                                    <Link href={route('docs.edit', doc)} className="btn btn-outline">
-                                        Edit
-                                    </Link>
-                                    <div className='btn btn-outline' onClick={() => handleShare(doc)}>
-                                        Share
+                                <div className='mt-4'>
+                                    <InputLabel forInput="variety" value="Jenis" />
+                                    <TextInput
+                                        type="text"
+                                        name="variety"
+                                        value={doc.variety.name}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="category" value="Kategori" />
+                                    <TextInput
+                                        type="text"
+                                        name="category"
+                                        value={doc.category.name}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel forInput="no_doc" value="No Dokumen" />
+                                    <TextInput
+                                        type="text"
+                                        name="no_doc"
+                                        value={doc.no_doc}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel forInput="name" value="Nama Dokumen" />
+                                    <TextInput
+                                        type="text"
+                                        name="name"
+                                        value={doc.name}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel forInput="publisher" value="Penerbit" />
+                                    <TextInput
+                                        type="text"
+                                        name="publisher"
+                                        value={doc.publisher}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="company_name" value="Nama Perusahaan" />
+                                    <TextInput
+                                        type="text"
+                                        name="company_name"
+                                        value={doc.company_name}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <div className="flex w-80 justify-between items-center">
+                                        <InputLabel value="Tipe" />
+                                        <label className="label cursor-pointer gap-2 pl-20">
+                                            <span className="label-text">Tetap</span> 
+                                            <input type="radio" name="type" value="1" className="radio" checked={+doc.type == 1} />
+                                        </label>
+                                        <label className="label cursor-pointer gap-2">
+                                            <span className="label-text">Tidak Tetap</span> 
+                                            <input type="radio" name="type" value="0" className="radio" checked={+doc.type == 0} />
+                                        </label>
                                     </div>
                                 </div>
-                                <Link href={route('docs.index')} className="btn btn-outline">
-                                    Kembali
-                                </Link>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="publish_date" value="Tanggal Terbit" />
+                                    <TextInput
+                                        type="text"
+                                        name="publish_date"
+                                        value={formatDate(doc.publish_date)}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="due_date" value="Tanggal Jatuh Tempo" />
+                                    <TextInput
+                                        type="text"
+                                        name="due_date"
+                                        value={formatDate(doc.due_date)}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="description" value="Keterangan" />
+                                    <TextInput
+                                        type="textarea"
+                                        name="description"
+                                        value={doc.description}
+                                        className="mt-1 block w-full"
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="document" value="Dokumen" />
+                                    <a href={doc_url} className='btn btn-outline'>Download</a>
+                                </div>
+                                <div className='mt-4'>
+                                    <div className="flex w-32 justify-between items-center">
+                                        <InputLabel value="Status" />
+                                        <label className="label cursor-pointer gap-2 pl-20">
+                                            <span className="label-text">Ya</span> 
+                                            <input type="radio" name="status" value="1" className="radio" checked={+doc.status == 1} />
+                                        </label>
+                                        <label className="label cursor-pointer gap-2">
+                                            <span className="label-text">Tidak</span> 
+                                            <input type="radio" name="status" value="0" className="radio" checked={+doc.status == 0} />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="due_status" value="Catatan" />
+                                    <TextInput
+                                        type="text"
+                                        name="due_status"
+                                        value={doc.due_status}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between mt-4">
+                                    <div className='flex flex-row space-x-1'>
+                                        <Link href={route('docs.edit', doc)} className="btn btn-outline">
+                                            Edit
+                                        </Link>
+                                    </div>
+                                    <Link href={route('docs.index')} className="btn btn-outline">
+                                        Kembali
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <ModalShare
-                isOpen={shareModal.isOpen}
-                toggle={shareModal.toggle}
-                modalState={shareModal}
-            />
             
         </AuthenticatedLayout>
     )

@@ -1,40 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, Head, useForm } from '@inertiajs/react'
+import React, { useEffect, useRef } from 'react'
+import { Link, Head, useForm, usePage } from '@inertiajs/react'
 import { toast } from 'react-toastify'
 
-import { statuses } from '@/utils'
-import { useModalState } from '@/Hooks'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import PrimaryButton from '@/Components/PrimaryButton'
 import InputLabel from '@/Components/InputLabel'
 import TextInput from '@/Components/TextInput'
 import InputError from '@/Components/InputError'
 import InputFile from '@/Components/InputFile'
-import ModalReminder from './ModalReminder'
-import { IconCross } from '@/Icons'
 
 export default function FormDocument(props) {
     const inputDocument = useRef()
-    const { types, departments, doc }= props
+    const { types, categories, doc }= props
+    const { props: {auth: { user }} } = usePage()
 
-    const [reminders, setReminders] = useState([])
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         no_doc: '',
         name: '',
-        email: '',
-        type_doc_id: '1',
-        department_id: '1',
         company_name: '',
-        first_person_name: '',
-        second_person_name: '',
-        start_date: '',
-        end_date: '',
-        pic_name: '',
-        note: '',
+        type_id: '',
+        category_id: '',
+        publisher: '',
+        description: '',
+        publish_date: '',
+        due_date: '',
+        status: 0,
+        type: 0,
+        group: user.group,
+        region: user.region,
         document: null,
         document_name: '',
-        status: 0,
-        reminders: []
     });
 
     useEffect(() => {
@@ -42,36 +37,22 @@ export default function FormDocument(props) {
             setData({
                 no_doc: doc.no_doc,
                 name: doc.name,
-                email: doc.email,
-                type_doc_id: doc.type_doc_id,
-                department_id: doc.department_id,
                 company_name: doc.company_name,
-                first_person_name: doc.first_person_name,
-                second_person_name: doc.second_person_name,
-                start_date: doc.start_date,
-                end_date: doc.end_date,
-                pic_name: doc.pic_name,
-                note: doc.note,
+                type_id: doc.type_id,
+                category_id: doc.category_id,
+                publisher: doc.publisher,
+                description: doc.description,
+                publish_date: doc.publish_date,
+                due_date: doc.due_date,
+                status: doc.status,
+                type: doc.type,
+                group: doc.group,
+                region: doc.region,
                 document: null,
                 document_name: doc.document,
-                status: doc.status,
-                reminders: doc.reminders.map(r => r.date)
             })
-            setReminders(doc.reminders.map(r => r.date))
         }
     }, [doc]);
-
-    const reminderModal = useModalState(false)
-    const handleAddReminder = (date) => {
-        setReminders(reminders.concat(date))
-        setData('reminders', reminders.concat(date))
-    }
-
-    const handleRemoveReminder = (index) => {
-        const r = reminders.filter((_, i) => i !== index)
-        setReminders(r)
-        setData('reminders', r)
-    }
 
     const onHandleChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
@@ -106,7 +87,63 @@ export default function FormDocument(props) {
                         <p className='font-bold text-2xl mb-4'>Dokumen</p>
                         <div className="overflow-x-auto">
                         <form onSubmit={submit}>
-                            <div>
+                        <div className='mt-4'>
+                                <InputLabel forInput="region" value="Region" />
+                                <TextInput
+                                    type="text"
+                                    name="region"
+                                    value={data.region}
+                                    className="mt-1 block w-full"
+                                    autoComplete={"false"}
+                                    handleChange={onHandleChange}
+                                    isError={errors.region}
+                                />
+                                <InputError message={errors.region}/>
+                            </div>
+                            <div className='mt-4'>
+                                <InputLabel forInput="group" value="Group" />
+                                <TextInput
+                                    type="text"
+                                    name="group"
+                                    value={data.group}
+                                    className="mt-1 block w-full"
+                                    autoComplete={"false"}
+                                    handleChange={onHandleChange}
+                                    isError={errors.group}
+                                />
+                                <InputError message={errors.group}/>
+                            </div>
+                            <div className='mt-4 pl-1'>
+                                <InputLabel forInput="type" value="Jenis" />
+                                <select 
+                                    className="mt-1 select select-bordered w-full" 
+                                    name="type_id" 
+                                    onChange={onHandleChange}
+                                    value={data.type_id}
+                                >
+                                    <option selected disabled></option>
+                                    {types.map(type => (
+                                        <option key={type.id} value={type.id}>{type.name}</option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.type_id}/>
+                            </div>
+                            <div className='mt-4 pl-1'>
+                                <InputLabel forInput="category" value="Ketegori" />
+                                <select 
+                                    className="mt-1 select select-bordered w-full" 
+                                    name="category_id" 
+                                    onChange={onHandleChange}
+                                    value={data.category_id}
+                                >
+                                    <option selected disabled></option>
+                                    {categories.map(category => (
+                                        <option key={category.id} value={category.id}>{category.name}</option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.category_id}/>
+                            </div>
+                            <div className='mt-4'>
                                 <InputLabel forInput="no_doc" value="No Dokumen" />
                                 <TextInput
                                     type="text"
@@ -120,20 +157,6 @@ export default function FormDocument(props) {
                                 <InputError message={errors.no_doc}/>
                             </div>
                             <div className='mt-4'>
-                                <InputLabel forInput="type" value="Jenis" />
-                                <select 
-                                    className="mt-1 select select-bordered w-full" 
-                                    name="type_doc_id" 
-                                    onChange={onHandleChange}
-                                    value={data.type_doc_id}
-                                >
-                                    {types.map(type => (
-                                        <option key={type.id} value={type.id}>{type.name}</option>
-                                    ))}
-                                </select>
-                                <InputError message={errors.type_doc_id}/>
-                            </div>
-                            <div>
                                 <InputLabel forInput="name" value="Nama Dokumen" />
                                 <TextInput
                                     type="text"
@@ -145,6 +168,19 @@ export default function FormDocument(props) {
                                     isError={errors.name}
                                 />
                                 <InputError message={errors.name}/>
+                            </div>
+                            <div className='mt-4'>
+                                <InputLabel forInput="publisher" value="Penerbit" />
+                                <TextInput
+                                    type="text"
+                                    name="publisher"
+                                    value={data.publisher}
+                                    className="mt-1 block w-full"
+                                    autoComplete={"false"}
+                                    handleChange={onHandleChange}
+                                    isError={errors.publisher}
+                                />
+                                <InputError message={errors.publisher}/>
                             </div>
                             <div className='mt-4'>
                                 <InputLabel forInput="company_name" value="Nama Perusahaan" />
@@ -160,109 +196,55 @@ export default function FormDocument(props) {
                                 <InputError message={errors.company_name}/>
                             </div>
                             <div className='mt-4'>
-                                <InputLabel forInput="first_person_name" value="Nama Pihak Pertama" />
-                                <TextInput
-                                    type="text"
-                                    name="first_person_name"
-                                    value={data.first_person_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.first_person_name}
-                                />
-                                <InputError message={errors.first_person_name}/>
+                                <div className="flex w-80 justify-between items-center">
+                                    <InputLabel value="Tipe" />
+                                    <label className="label cursor-pointer gap-2 pl-20">
+                                        <span className="label-text">Tetap</span> 
+                                        <input type="radio" name="type" onChange={onHandleChange} value="1" className="radio" checked={+data.type == 1} />
+                                    </label>
+                                    <label className="label cursor-pointer gap-2">
+                                        <span className="label-text">Tidak Tetap</span> 
+                                        <input type="radio" name="type" onChange={onHandleChange} value="0" className="radio" checked={+data.type == 0} />
+                                    </label>
+                                </div>
                             </div>
                             <div className='mt-4'>
-                                <InputLabel forInput="second_person_name" value="Nama Pihak Kedua" />
-                                <TextInput
-                                    type="text"
-                                    name="second_person_name"
-                                    value={data.second_person_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.second_person_name}
-                                />
-                                <InputError message={errors.second_person_name}/>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="start_date" value="Tanggal Mulai" />
+                                <InputLabel forInput="publish_date" value="Tanggal Terbit" />
                                 <TextInput
                                     type="date"
-                                    name="start_date"
-                                    value={data.start_date}
+                                    name="publish_date"
+                                    value={data.publish_date}
                                     className="mt-1 block w-full"
                                     autoComplete={"false"}
                                     handleChange={onHandleChange}
-                                    isError={errors.start_date}
+                                    isError={errors.publish_date}
                                 />
-                                <InputError message={errors.start_date}/>
+                                <InputError message={errors.publish_date}/>
                             </div>
                             <div className='mt-4'>
-                                <InputLabel forInput="end_date" value="Tanggal Berakhir" />
+                                <InputLabel forInput="due_date" value="Tanggal Jatuh Tempo" />
                                 <TextInput
                                     type="date"
-                                    name="end_date"
-                                    value={data.end_date}
+                                    name="due_date"
+                                    value={data.due_date}
                                     className="mt-1 block w-full"
                                     autoComplete={"false"}
                                     handleChange={onHandleChange}
-                                    isError={errors.end_date}
+                                    isError={errors.due_date}
                                 />
-                                <InputError message={errors.end_date}/>
-                            </div>
-
-                            <div className='mt-4'>
-                                <InputLabel forInput="type" value="Deparment" />
-                                <select 
-                                    className="mt-1 select select-bordered w-full" 
-                                    name="department_id" 
-                                    onChange={onHandleChange} 
-                                    value={data.department_id}
-                                >
-                                    {departments.map(dep => (
-                                        <option key={dep.id} value={dep.id}>{dep.name}</option>
-                                    ))}
-                                </select>
-                                <InputError message={errors.type_doc_id}/>
+                                <InputError message={errors.due_date}/>
                             </div>
                             <div className='mt-4'>
-                                <InputLabel forInput="pic_name" value="Nama PIC" />
-                                <TextInput
-                                    type="text"
-                                    name="pic_name"
-                                    value={data.pic_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.pic_name}
-                                />
-                                <InputError message={errors.pic_name}/>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="email" value="Email" />
-                                <TextInput
-                                    type="text"
-                                    name="email"
-                                    value={data.email}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.email}
-                                />
-                                <InputError message={errors.email}/>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="note" value="Catatan" />
+                                <InputLabel forInput="description" value="Keterangan" />
                                 <TextInput
                                     type="textarea"
-                                    name="note"
-                                    value={data.note}
+                                    name="description"
+                                    value={data.description}
                                     className="mt-1 block w-full"
                                     handleChange={onHandleChange}
-                                    isError={errors.note}
+                                    isError={errors.description}
                                 />
-                                <InputError message={errors.note}/>
+                                <InputError message={errors.description}/>
                             </div>
                             <div className='mt-4'>
                                 <InputLabel forInput="document" value="Dokumen" />
@@ -277,40 +259,20 @@ export default function FormDocument(props) {
                                     <p className='text-sm'>file saved is found, reupload to replace</p>
                                 )}
                             </div>
-                            {/* <div className='mt-4'>
-                                <InputLabel forInput="status" value="Status" />
-                                <select 
-                                    className="mt-1 select select-bordered w-full" 
-                                    name="status" 
-                                    onChange={onHandleChange} 
-                                    value={data.status}
-                                >
-                                    {statuses.map(status => (
-                                        <option key={`status-${status.key}`} value={status.key}>{status.value}</option>
-                                    ))}
-                                </select>
-                                <InputError message={errors.status}/>
-                            </div> */}
                             <div className='mt-4'>
-                                <div className='flex flex-row space-x-5 items-center'>
-                                    <InputLabel forInput="reminder" value="Reminder" />
-                                    <div className='btn btn-xs' onClick={reminderModal.toggle}>+ Tambah</div>
-                                </div>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-1 mt-4">
-                                    {reminders.map((reminder, index) => (
-                                        <div className='card text-center shadow-md pt-2 pb-2 px-2 bg-blue-300' key={index}> 
-                                            <div className='flex'>
-                                                <div  className='flex-1'>
-                                                    {reminder} 
-                                                </div>
-                                                <div className="btn btn-square btn-error btn-xs" onClick={() => handleRemoveReminder(index)}>
-                                                    <IconCross/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="flex w-32 justify-between items-center">
+                                    <InputLabel value="Status" />
+                                    <label className="label cursor-pointer gap-2 pl-20">
+                                        <span className="label-text">Ya</span> 
+                                        <input type="radio" name="status" onChange={onHandleChange} value="1" className="radio" checked={+data.status == 1} />
+                                    </label>
+                                    <label className="label cursor-pointer gap-2">
+                                        <span className="label-text">Tidak</span> 
+                                        <input type="radio" name="status" onChange={onHandleChange} value="0" className="radio" checked={+data.status == 0} />
+                                    </label>
                                 </div>
                             </div>
+                            
                             <div className="flex items-center justify-between mt-4">
                                 <PrimaryButton processing={processing}>
                                     Simpan
@@ -325,12 +287,6 @@ export default function FormDocument(props) {
                     </div>
                 </div>
             </div>
-            <ModalReminder
-                isOpen={reminderModal.isOpen}
-                toggle={reminderModal.toggle}
-                onAdd={handleAddReminder}
-            />
-            
         </AuthenticatedLayout>
     )
 }
