@@ -57,6 +57,18 @@ class DatabaseSeeder extends Seeder
             ['name' => 'update-user', 'label' => 'Edit User'],
             ['name' => 'create-user', 'label' => 'Buat User'],
             ['name' => 'delete-user', 'label' => 'Hapus User'],
+            ['name' => 'view-group', 'label' => 'Lihat Group'],
+            ['name' => 'update-group', 'label' => 'Edit Group'],
+            ['name' => 'create-group', 'label' => 'Buat Group'],
+            ['name' => 'delete-group', 'label' => 'Hapus Group'],
+            ['name' => 'view-region', 'label' => 'Lihat Region'],
+            ['name' => 'update-region', 'label' => 'Edit Region'],
+            ['name' => 'create-region', 'label' => 'Buat Region'],
+            ['name' => 'delete-region', 'label' => 'Hapus Region'],
+            ['name' => 'view-company', 'label' => 'Lihat Perusahaan'],
+            ['name' => 'update-company', 'label' => 'Edit Perusahaan'],
+            ['name' => 'create-company', 'label' => 'Buat Perusahaan'],
+            ['name' => 'delete-company', 'label' => 'Hapus Perusahaan'],
             ['name' => 'view-setting', 'label' => 'Setting'],
         ];
 

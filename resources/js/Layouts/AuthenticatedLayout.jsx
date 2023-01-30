@@ -13,6 +13,11 @@ const rs = [
         {name: "Ketegori", route: 'categories.index', show: true, permission: 'view-category'},
         {name: "Jenis", route: 'types.index', show: true, permission: 'view-type'},
     ]},
+    {name: "Perusahaan", show: true, items: [
+        {name:"Group", route: "groups.index", show: true, permission: 'view-group'},
+        {name:"Region", route: "regions.index", show: true, permission: 'view-region'},
+        {name:"Perusahaan", route: "groups.index", show: true, permission: 'view-company'},
+    ]},
     {name: "User", show: true, items: [
         {name:"User", route: "users.index", show: true, permission: 'view-user'},
         {name:"Role", route: "roles.index", show: true, permission: 'view-role'},
@@ -54,7 +59,7 @@ export default function Authenticated({ auth, children, flash, notify }) {
                     <div className="px-2">
                         <a className="text-xl font-bold">Monitor Doc</a>
                     </div> 
-                    <div className="sm:flex flex-1 px-6 hidden">
+                    <div className="sm:flex px-6 hidden">
                         <div className="flex items-stretch gap-2">
                             {routes.filter(r => r.show).map((item, index) => (
                                 <div key={index}>

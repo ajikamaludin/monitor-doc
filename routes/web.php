@@ -3,7 +3,9 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TypeController;
@@ -39,6 +41,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+    Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
+    Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
+    Route::put('/groups/{group}', [GroupController::class, 'update'])->name('groups.update');
+    Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
+
+    Route::get('/regions', [RegionController::class, 'index'])->name('regions.index');
+    Route::post('/regions', [RegionController::class, 'store'])->name('regions.store');
+    Route::put('/regions/{region}', [RegionController::class, 'update'])->name('regions.update');
+    Route::delete('/regions/{region}', [RegionController::class, 'destroy'])->name('regions.destroy');
 
     Route::get('/types', [TypeController::class, 'index'])->name('types.index');
     Route::post('/types', [TypeController::class, 'store'])->name('types.store');
