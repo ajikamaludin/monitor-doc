@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string("no")->nullable();
             $table->string("no_doc")->nullable();
             $table->string("name")->nullable();
-            $table->string("company_name")->nullable();
             $table->foreignId("type_id")->constrained(); //select jenis
             $table->foreignId("category_id")->constrained(); //select
             $table->string("publisher")->nullable();
@@ -26,10 +25,15 @@ return new class extends Migration {
             $table->timestamp("due_date")->nullable(); //for reminder
             $table->smallInteger("status")->default(1); //only 1 yes/ 0no 
             $table->smallInteger("type")->default(1); //only 1 tetap/ 0tidak tetap 
-            $table->string("group")->nullable();
-            $table->string("region")->nullable();
             $table->string("document")->nullable();
             $table->foreignId("user_id")->constrained();
+
+            $table->foreignId("company_id")->constrained();
+            // ?
+            // $table->string("group")->nullable();
+            // $table->string("region")->nullable();
+            // $table->string("company_name")->nullable();
+
             $table->timestamps();
         });
     }

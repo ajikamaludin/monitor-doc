@@ -37,7 +37,7 @@ export default function Dashboard(props) {
                     <div className="card-body">
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text font-semibold">Email</span>
+                                <span className="label-text font-semibold">Email Tujuan</span>
                             </label>
                             <input
                                 type="text"

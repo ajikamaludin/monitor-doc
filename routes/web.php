@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\GroupController;
@@ -51,6 +52,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/regions', [RegionController::class, 'store'])->name('regions.store');
     Route::put('/regions/{region}', [RegionController::class, 'update'])->name('regions.update');
     Route::delete('/regions/{region}', [RegionController::class, 'destroy'])->name('regions.destroy');
+
+    Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+    Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('companies.update');
+    Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
     Route::get('/types', [TypeController::class, 'index'])->name('types.index');
     Route::post('/types', [TypeController::class, 'store'])->name('types.store');

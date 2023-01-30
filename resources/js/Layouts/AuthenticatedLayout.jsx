@@ -16,7 +16,7 @@ const rs = [
     {name: "Perusahaan", show: true, items: [
         {name:"Group", route: "groups.index", show: true, permission: 'view-group'},
         {name:"Region", route: "regions.index", show: true, permission: 'view-region'},
-        {name:"Perusahaan", route: "groups.index", show: true, permission: 'view-company'},
+        {name:"Perusahaan", route: "companies.index", show: true, permission: 'view-company'},
     ]},
     {name: "User", show: true, items: [
         {name:"User", route: "users.index", show: true, permission: 'view-user'},

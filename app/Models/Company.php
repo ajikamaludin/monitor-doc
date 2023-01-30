@@ -15,6 +15,11 @@ class Company extends Model
         "short"
     ];
 
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);

@@ -21,7 +21,6 @@ class Document extends Model
         "no",
         "no_doc",
         "name",
-        "company_name",
         "type_id",
         "category_id",
         "publisher",
@@ -30,10 +29,12 @@ class Document extends Model
         "due_date",
         "status",
         "type",
-        "group",
-        "region",
         "document",
         "user_id",
+        "company_id",
+        // "company_name",
+        // "group",
+        // "region",
     ];
 
     protected $casts = [
