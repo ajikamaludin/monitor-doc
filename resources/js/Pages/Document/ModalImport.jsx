@@ -10,9 +10,6 @@ export default function ModalImport(props) {
 
     const inputFileImport = useRef();
 
-    console.log(data)
-    console.log(inputFileImport)
-
     const handleReset = () => {
         setData({file: null});
         inputFileImport.current.value = ""
