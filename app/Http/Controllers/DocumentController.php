@@ -39,7 +39,6 @@ class DocumentController extends Controller
             $query->where(function ($query) use ($request) {
                 $query->where('no_doc', 'like', '%'.$request->q.'%')
                 ->orWhere('name', 'like', '%'.$request->q.'%')
-                ->orWhere('company_name', 'like', '%'.$request->q.'%')
                 ->orWhere('no', 'like', '%'.$request->q.'%');
             });
         }
