@@ -4,14 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 class Group extends Model
 {
-    use HasFactory;
+    use HasFactory, CascadesDeletes;
 
     protected $fillable = [
         "name"
     ];
+
+    protected $cascadeDeletes = ['regions'];
 
     public function regions() 
     {

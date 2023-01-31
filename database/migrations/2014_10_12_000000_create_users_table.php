@@ -22,7 +22,8 @@ return new class extends Migration {
             $table->bigInteger('role_id')->nullable();
             // $table->string('group')->nullable();
             // $table->string('region')->nullable();
-            $table->bigInteger("company_id")->nullable();
+            // $table->bigInteger("company_id")->nullable();
+            $table->bigInteger("region_id")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

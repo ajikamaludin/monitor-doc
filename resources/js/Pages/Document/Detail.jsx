@@ -8,7 +8,6 @@ import TextInput from '@/Components/TextInput'
 import { formatDate } from '@/utils'
 import { useModalState } from '@/Hooks'
 
-
 export default function FormDocument(props) {
     const { doc, doc_url }= props
 
@@ -28,22 +27,33 @@ export default function FormDocument(props) {
                         <div className="overflow-x-auto">
                             <div>
                                 <div className='mt-4'>
-                                    <InputLabel forInput="region" value="Region" />
+                                    <InputLabel forInput="group" value="Group" />
                                     <TextInput
                                         type="text"
-                                        name="region"
-                                        value={doc.region}
+                                        name="group"
+                                        value={doc.company?.region?.group?.name}
                                         className="mt-1 block w-full"
                                         autoComplete={"false"}
                                         readOnly={true}
                                     />
                                 </div>
                                 <div className='mt-4'>
-                                    <InputLabel forInput="group" value="Group" />
+                                    <InputLabel forInput="region" value="Region" />
                                     <TextInput
                                         type="text"
-                                        name="group"
-                                        value={doc.group}
+                                        name="region"
+                                        value={doc.company?.region?.name}
+                                        className="mt-1 block w-full"
+                                        autoComplete={"false"}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                <div className='mt-4'>
+                                    <InputLabel forInput="company_name" value="Nama Perusahaan" />
+                                    <TextInput
+                                        type="text"
+                                        name="company_name"
+                                        value={doc.company?.name}
                                         className="mt-1 block w-full"
                                         autoComplete={"false"}
                                         readOnly={true}
@@ -71,7 +81,7 @@ export default function FormDocument(props) {
                                         readOnly={true}
                                     />
                                 </div>
-                                <div>
+                                <div className='mt-4'>
                                     <InputLabel forInput="no_doc" value="No Dokumen" />
                                     <TextInput
                                         type="text"
@@ -82,7 +92,7 @@ export default function FormDocument(props) {
                                         readOnly={true}
                                     />
                                 </div>
-                                <div>
+                                <div className='mt-4'>
                                     <InputLabel forInput="name" value="Nama Dokumen" />
                                     <TextInput
                                         type="text"
@@ -93,23 +103,12 @@ export default function FormDocument(props) {
                                         readOnly={true}
                                     />
                                 </div>
-                                <div>
+                                <div className='mt-4'>
                                     <InputLabel forInput="publisher" value="Penerbit" />
                                     <TextInput
                                         type="text"
                                         name="publisher"
                                         value={doc.publisher}
-                                        className="mt-1 block w-full"
-                                        autoComplete={"false"}
-                                        readOnly={true}
-                                    />
-                                </div>
-                                <div className='mt-4'>
-                                    <InputLabel forInput="company_name" value="Nama Perusahaan" />
-                                    <TextInput
-                                        type="text"
-                                        name="company_name"
-                                        value={doc.company_name}
                                         className="mt-1 block w-full"
                                         autoComplete={"false"}
                                         readOnly={true}

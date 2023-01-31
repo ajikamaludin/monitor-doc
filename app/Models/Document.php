@@ -49,6 +49,11 @@ class Document extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     public function variety()
     {
         return $this->belongsTo(Type::class, 'type_id');
@@ -110,5 +115,19 @@ class Document extends Model
                 return 0;
             },
         );
+    }
+
+    public function scopeCloseToExpired($query) {
+        $ids = collect();
+        $categories = Category::all();
+        foreach($categories as $category) {
+            foreach($category->documents as $docs) {
+                if ($docs->is_close_due != 0) {
+                    $ids->add($docs->id);
+                }
+            }
+        }
+
+        $query->whereIn("id", $ids->toArray());
     }
 }

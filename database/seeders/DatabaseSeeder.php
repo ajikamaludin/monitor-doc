@@ -4,9 +4,16 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Category;
+use App\Models\Company;
 use App\Models\Department;
+use App\Models\Group;
 use App\Models\Permission;
+use App\Models\Region;
+use App\Models\Role;
+use App\Models\RolePermission;
 use App\Models\Setting;
+use App\Models\Type;
 use App\Models\TypeDoc;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -41,6 +48,8 @@ class DatabaseSeeder extends Seeder
             ['name' => 'update-document', 'label' => 'Edit Dokumen'],
             ['name' => 'create-document', 'label' => 'Buat Dokumen'],
             ['name' => 'delete-document', 'label' => 'Hapus Dokumen'],
+            ['name' => 'import-document', 'label' => 'Import Dokumen'],
+            ['name' => 'export-document', 'label' => 'Export Dokumen'],
             ['name' => 'view-category', 'label' => 'Lihat Kategori'],
             ['name' => 'update-category', 'label' => 'Edit Kategori'],
             ['name' => 'create-category', 'label' => 'Buat Kategori'],
@@ -86,9 +95,80 @@ class DatabaseSeeder extends Seeder
             'is_admin' => 1, // admin user
         ]);
 
+
+        Type::create(['name' => 'Type 1']);
+        Category::create(['name' => 'Category 1', 'short' => 'C1', 'duration' => 3]);
+
         Setting::create([
             'key' => 'DESTINATION_MAIL',
             'value' => 'aji19kamaludin@gmail.com'
+        ]);
+
+        // role
+        $role = Role::create(['name' => 'admin']);
+
+        $permissions = Permission::all()->map(function ($item) use($role) {
+            return [
+                'role_id' => $role->id,
+                'permission_id' => $item->id,
+            ];
+        })->toArray();
+        RolePermission::insert($permissions);
+
+        // 1
+        $group = Group::create(['name' => 'G1']);
+        $region = Region::create([
+            'group_id' => $group->id,
+            'name' => 'R1'
+        ]);
+
+        Company::create([
+            'region_id' => $region->id,
+            'name' => 'Company 1',
+            'short' => 'C1',
+        ]);
+
+        Company::create([
+            'region_id' => $region->id,
+            'name' => 'Company 2',
+            'short' => 'C2',
+        ]);
+
+        User::create([
+            'name' => 'User Administrator',
+            'email' => 'user@admin.com',
+            'password' => bcrypt('password'),
+            'is_admin' => 0, // admin user,
+            'role_id' => $role->id,
+            'region_id' => $region->id
+        ]);
+
+        // 2
+        $group = Group::create(['name' => 'G2']);
+        $region = Region::create([
+            'group_id' => $group->id,
+            'name' => 'R2'
+        ]);
+
+        Company::create([
+            'region_id' => $region->id,
+            'name' => 'Company 3',
+            'short' => 'C3',
+        ]);
+
+        Company::create([
+            'region_id' => $region->id,
+            'name' => 'Company 4',
+            'short' => 'C4',
+        ]);
+
+        User::create([
+            'name' => 'User2 Administrator',
+            'email' => 'user2@admin.com',
+            'password' => bcrypt('password'),
+            'is_admin' => 0, // admin user,
+            'role_id' => $role->id,
+            'region_id' => $region->id
         ]);
     }
 }

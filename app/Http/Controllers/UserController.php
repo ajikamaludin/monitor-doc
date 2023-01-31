@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Region;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with('role')->orderBy('id');
+        $query = User::with(['role', 'region.group'])->orderBy('id');
 
         if ($request->q != null) {
             $query->where('name', 'like', '%'.$request->q.'%');
@@ -24,6 +25,7 @@ class UserController extends Controller
         return inertia('User/Index', [
             'users' => $query->paginate(10),
             'roles' => Role::all(),
+            'regions' => Region::all(),
         ]);
     }
 
@@ -39,7 +41,8 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'role_id' => 'required|exists:roles,id'
+            'role_id' => 'required|exists:roles,id',
+            'region_id' => 'required|exists:regions,id',
         ]);
 
         User::create([
@@ -47,8 +50,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role_id' => $request->role_id,
-            'group' => $request->group,
-            'region' => $request->region
+            'region_id' => $request->region_id
         ]);
 
         return redirect()->route('users.index');
@@ -71,11 +73,12 @@ class UserController extends Controller
 
         if ($user->is_admin == 0) {
             $request->validate([
-                'role_id' => 'required|exists:roles,id'
+                'role_id' => 'required|exists:roles,id',
+                'region_id' => 'required|exists:regions,id',
             ]);
         }
 
-        $user->update($request->only(['name', 'email', 'role_id', 'group', 'region']));
+        $user->update($request->only(['name', 'email', 'role_id', 'region_id']));
         if ($request->password != null) {
             $user->update(['password' => bcrypt($request->password)]);
         }
@@ -92,6 +95,5 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->back();
     }
 }

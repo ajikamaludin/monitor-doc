@@ -58,13 +58,6 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        $group->regions()->each(function ($region) {
-            $region->companies()->each(function($company) {
-                $company->users()->delete();
-            });
-            $region->companies()->delete();
-        });
-        $group->regions()->delete();
         $group->delete();
     }
 }

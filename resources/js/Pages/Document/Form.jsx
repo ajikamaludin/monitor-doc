@@ -11,13 +11,11 @@ import InputFile from '@/Components/InputFile'
 
 export default function FormDocument(props) {
     const inputDocument = useRef()
-    const { types, categories, doc }= props
-    const { props: {auth: { user }} } = usePage()
+    const { types, categories, companies, doc }= props
 
     const { data, setData, post, processing, errors } = useForm({
         no_doc: '',
         name: '',
-        company_name: '',
         type_id: '',
         category_id: '',
         publisher: '',
@@ -26,8 +24,7 @@ export default function FormDocument(props) {
         due_date: '',
         status: 0,
         type: 0,
-        group: user.group,
-        region: user.region,
+        company_id: '',
         document: null,
         document_name: '',
     });
@@ -37,7 +34,6 @@ export default function FormDocument(props) {
             setData({
                 no_doc: doc.no_doc,
                 name: doc.name,
-                company_name: doc.company_name,
                 type_id: doc.type_id,
                 category_id: doc.category_id,
                 publisher: doc.publisher,
@@ -46,8 +42,7 @@ export default function FormDocument(props) {
                 due_date: doc.due_date,
                 status: doc.status,
                 type: doc.type,
-                group: doc.group,
-                region: doc.region,
+                company_id: doc.company_id,
                 document: null,
                 document_name: doc.document,
             })
@@ -87,32 +82,6 @@ export default function FormDocument(props) {
                         <p className='font-bold text-2xl mb-4'>Dokumen</p>
                         <div className="overflow-x-auto">
                         <form onSubmit={submit}>
-                        <div className='mt-4'>
-                                <InputLabel forInput="region" value="Region" />
-                                <TextInput
-                                    type="text"
-                                    name="region"
-                                    value={data.region}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.region}
-                                />
-                                <InputError message={errors.region}/>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="group" value="Group" />
-                                <TextInput
-                                    type="text"
-                                    name="group"
-                                    value={data.group}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.group}
-                                />
-                                <InputError message={errors.group}/>
-                            </div>
                             <div className='mt-4 pl-1'>
                                 <InputLabel forInput="type" value="Jenis" />
                                 <select 
@@ -142,6 +111,21 @@ export default function FormDocument(props) {
                                     ))}
                                 </select>
                                 <InputError message={errors.category_id}/>
+                            </div>
+                            <div className='mt-4 pl-1'>
+                                <InputLabel forInput="company" value="Nama Perusahaan" />
+                                <select 
+                                    className="mt-1 select select-bordered w-full" 
+                                    name="company_id" 
+                                    onChange={onHandleChange}
+                                    value={data.company_id}
+                                >
+                                    <option selected disabled></option>
+                                    {companies.map(company => (
+                                        <option key={company.id} value={company.id}>{company.name}</option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.company_id}/>
                             </div>
                             <div className='mt-4'>
                                 <InputLabel forInput="no_doc" value="No Dokumen" />
@@ -181,19 +165,6 @@ export default function FormDocument(props) {
                                     isError={errors.publisher}
                                 />
                                 <InputError message={errors.publisher}/>
-                            </div>
-                            <div className='mt-4'>
-                                <InputLabel forInput="company_name" value="Nama Perusahaan" />
-                                <TextInput
-                                    type="text"
-                                    name="company_name"
-                                    value={data.company_name}
-                                    className="mt-1 block w-full"
-                                    autoComplete={"false"}
-                                    handleChange={onHandleChange}
-                                    isError={errors.company_name}
-                                />
-                                <InputError message={errors.company_name}/>
                             </div>
                             <div className='mt-4'>
                                 <div className="flex w-80 justify-between items-center">

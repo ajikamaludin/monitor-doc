@@ -12,10 +12,9 @@ import { IconMenu } from '@/Icons'
 import { formatDate, hasPermission } from '@/utils'
 
 export default function Document(props) {
-    const { types, departments } = props
     const { data: docs, links } = props.docs
 
-    const [search, setSearch] = useState({q: ''})
+    const [search, setSearch] = useState({q: '', status: 0})
     const preValue = usePrevious(search)
 
     const confirmModal = useModalState(false)
@@ -64,6 +63,8 @@ export default function Document(props) {
     const canCreate = hasPermission('create-document', props.auth.user)
     const canUpdate = hasPermission('update-document', props.auth.user)
     const canDelete = hasPermission('delete-document', props.auth.user)
+    const canImport = hasPermission('import-document', props.auth.user)
+    const canExport = hasPermission('export-document', props.auth.user)
 
     return (
         <AuthenticatedLayout
@@ -77,6 +78,7 @@ export default function Document(props) {
                 <div className="card bg-base-100 w-full">
                     <div className="card-body">
                         <div className="flex flex-col md:flex-row w-full mb-4 justify-between space-y-1 md:space-y-0">
+                            <div className='flex flex-row gap-2'>
                             {canCreate && (
                                 <Link
                                     className="btn btn-neutral"
@@ -85,7 +87,13 @@ export default function Document(props) {
                                     Tambah
                                 </Link>
                             )}
-                            <div className='flex flex-row'>
+                            {canImport && (
+                                <div className='btn btn-outline'>
+                                    Import
+                                </div>
+                            )}
+                            </div>
+                            <div className='flex md:flex-row flex-col gap-2'>
                                 <div className="form-control w-full">
                                     <input
                                         type="text"
@@ -96,6 +104,25 @@ export default function Document(props) {
                                         }
                                         placeholder="Search"
                                     />
+                                </div>
+                                <div className='flex flex-row gap-2'>
+                                    <div className="dropdown dropdown-end">
+                                        <label tabIndex={0} className="btn btn-outline">Filter</label>
+                                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                            <li><div onClick={() => handleFilter({status: 0})}>Semua</div></li>
+                                            <li><div onClick={() => handleFilter({status: 1})}>Jatuh Tempo</div></li>
+                                            <li><div onClick={() => handleFilter({status: 2})}>Mendekati Jatuh Tempo</div></li>
+                                        </ul>
+                                    </div>
+                                    {canExport && (
+                                    <div className="dropdown dropdown-end">
+                                        <label tabIndex={0} className="btn btn-outline">Export</label>
+                                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                            <li><a>XLSX</a></li>
+                                            <li><a>PDF</a></li>
+                                        </ul>
+                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

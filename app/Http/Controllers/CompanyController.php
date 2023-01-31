@@ -72,7 +72,6 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        $company->users()->delete();
         $company->delete();
     }
 }

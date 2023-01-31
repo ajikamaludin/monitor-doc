@@ -89,10 +89,6 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $role->rolePermissions()->delete();
-
-        $role->users()->delete();
-
         $role->delete();
     }
 }

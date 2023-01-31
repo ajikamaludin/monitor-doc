@@ -27,7 +27,6 @@ return new class extends Migration {
             $table->smallInteger("type")->default(1); //only 1 tetap/ 0tidak tetap 
             $table->string("document")->nullable();
             $table->foreignId("user_id")->constrained();
-
             $table->foreignId("company_id")->constrained();
             // ?
             // $table->string("group")->nullable();

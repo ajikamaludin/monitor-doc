@@ -68,11 +68,6 @@ class RegionController extends Controller
      */
     public function destroy(Region $region)
     {
-        $region->companies()->each(function($company) {
-            $company->users()->delete();
-        });
-        $region->companies()->delete();
-
         $region->delete();
     }
 }

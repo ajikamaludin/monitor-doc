@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Company;
 use App\Models\Document;
 use App\Models\Type;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -12,6 +14,15 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         $query = Document::with(['variety', 'category']);
+
+        if ($request->has('status')) {
+            if($request->status == 1) {
+                $query->whereDate('due_date', '<', now()->toDateString());
+            } 
+            if($request->status == 2) {
+                $query->closeToExpired();
+            }
+        }
 
         if ($request->has('sortBy') && $request->has('sortRule')) {
             $query->orderBy($request->sortBy, $request->sortRule);
@@ -37,7 +48,15 @@ class DocumentController extends Controller
 
     public function create()
     {
+        $user = User::find(auth()->user()->id);
+        if ($user->is_admin) {
+            $companies = Company::all();
+        } else {
+            $companies = Company::where('region_id', $user->region_id)->get();
+        }
+
         return inertia('Document/Form', [
+            'companies' => $companies,
             'types' => Type::all(),
             'categories' => Category::all(),
         ]);
@@ -48,7 +67,6 @@ class DocumentController extends Controller
         $request->validate([
             "no_doc" => "nullable|string",
             "name" => "required|string",
-            "company_name" => "required|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
@@ -57,8 +75,7 @@ class DocumentController extends Controller
             "due_date" => "required_if:type,0",
             "status" => "required|in:0,1",
             "type" => "required|in:0,1",
-            "group" => "required|string",
-            "region" => "required|string",
+            "company_id" => "required|exists:companies,id",
             "document" => "required|file",
         ]);
 
@@ -79,7 +96,6 @@ class DocumentController extends Controller
             "no" => Document::count() + 1,
             "no_doc" => $request->no_doc,
             "name" => $request->name,
-            "company_name" => $request->company_name,
             "type_id" => $request->type_id,
             "category_id" => $request->category_id,
             "publisher" => $request->publisher,
@@ -88,8 +104,7 @@ class DocumentController extends Controller
             "due_date" => $request->due_date,
             "status" => $request->status,
             "type" => $request->type,
-            "group" => $request->group,
-            "region" => $request->region,
+            "company_id" => $request->company_id,
             "user_id" => auth()->user()->id,
         ]);
 
@@ -105,7 +120,15 @@ class DocumentController extends Controller
 
     public function edit(Document $doc)
     {
+        $user = User::find(auth()->user()->id);
+        if ($user->is_admin) {
+            $companies = Company::all();
+        } else {
+            $companies = Company::where('region_id', $user->region_id)->get();
+        }
+    
         return inertia('Document/Form', [
+            'companies' => $companies,
             'types' => Type::all(),
             'categories' => Category::all(),
             'doc' => $doc->load(['variety', 'category'])
@@ -117,7 +140,6 @@ class DocumentController extends Controller
         $request->validate([
             "no_doc" => "nullable|string",
             "name" => "required|string",
-            "company_name" => "required|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
@@ -126,8 +148,7 @@ class DocumentController extends Controller
             "due_date" => "required_if:type,1",
             "status" => "required|in:0,1",
             "type" => "required|in:0,1",
-            "group" => "required|string",
-            "region" => "required|string",
+            "company_id" => "required|exists:companies,id",
             "document" => "nullable|file",
         ]);
 
@@ -148,7 +169,6 @@ class DocumentController extends Controller
             "no" => Document::count() + 1,
             "no_doc" => $request->no_doc,
             "name" => $request->name,
-            "company_name" => $request->company_name,
             "type_id" => $request->type_id,
             "category_id" => $request->category_id,
             "publisher" => $request->publisher,
@@ -157,8 +177,7 @@ class DocumentController extends Controller
             "due_date" => $request->due_date,
             "status" => $request->status,
             "type" => $request->type,
-            "group" => $request->group,
-            "region" => $request->region,
+            "company_id" => $request->company_id,
             "user_id" => auth()->user()->id,
         ]);
 
@@ -177,7 +196,7 @@ class DocumentController extends Controller
     public function show(Document $doc)
     {
         return inertia('Document/Detail', [
-            'doc' => $doc->load(['variety', 'category']),
+            'doc' => $doc->load(['variety', 'category', 'company.region.group']),
             'doc_url' => asset('documents/'.$doc->document),
         ]);
     }

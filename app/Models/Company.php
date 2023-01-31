@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 class Company extends Model
 {
-    use HasFactory;
+    use HasFactory, CascadesDeletes;
 
     protected $fillable = [
         "region_id",
@@ -15,13 +16,15 @@ class Company extends Model
         "short"
     ];
 
+    protected $cascadeDeletes = ['documents'];
+
     public function region()
     {
         return $this->belongsTo(Region::class);
     }
 
-    public function users()
+    public function documents()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Document::class);
     }
 }
