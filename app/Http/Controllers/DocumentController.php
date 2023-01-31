@@ -7,7 +7,10 @@ use App\Models\Company;
 use App\Models\Document;
 use App\Models\Type;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class DocumentController extends Controller
 {
@@ -204,5 +207,62 @@ class DocumentController extends Controller
     public function destroy(Document $doc)
     {
         $doc->delete();
+    }
+
+    public function import()
+    {
+        // 
+    }
+
+
+    public function export(Request $request)
+    {
+        $query = Document::with(['variety', 'category', 'company.region.group'])->orderBy('created_at', 'desc');
+
+        $collections = collect([]);
+        foreach ($query->get() as $document) {
+            $collections->add([
+                'group' => $document->company->region->group->name,
+                'region' => $document->company->region->name,
+                'nama perusahaan' => $document->company->name,
+                'jenis' => $document->variety->name,
+                'kategori' => $document->category->name,
+                'no' => $document->no_doc,
+                'nama' => $document->name,
+                'penerbit' => $document->publisher,
+                'tipe' => $document->type == Document::TYPE_TETAP ? 'Tetap' : 'Tidak Tetap',
+                'tanggal terbit' => $document->publish_date->format('d-m-Y'),
+                'tanggal jatuh tempo' => $document->due_date->format('d-m-Y'),
+                'keterangan' => $document->description,
+                'file' => asset('documents/'.$document->document),
+                'status' => $document->status == Document::STATUS_YES ? 'Ya' : 'Tidak',
+                'catatan' => $document->due_status,
+            ]);
+        }
+
+        if($request->type == 'pdf') {
+            return $this->exportAsPdf($collections);
+        }
+        if($request->type == 'excel') {
+            return $this->exportAsExcel($collections);
+        }
+    }
+
+    private function exportAsPdf($collections) 
+    {
+        $pdf = Pdf::loadView('exports.documents', ['collections' => $collections->toArray()]);
+        $date = now()->format('d-m-Y');
+
+        return $pdf->download("documents-$date.pdf");
+    }
+
+    private function exportAsExcel($collections)
+    {
+        $date = now()->format('d-m-Y');
+        $header_style = (new StyleBuilder())->setFontBold()->build();
+
+        return (new FastExcel($collections))
+            ->headerStyle($header_style)
+            ->download("document-$date.xlsx");
     }
 }

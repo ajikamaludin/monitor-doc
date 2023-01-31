@@ -30,6 +30,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/docs/export', [DocumentController::class, 'export'])->name('docs.export');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [GeneralController::class, 'index'])->name('dashboard');
 

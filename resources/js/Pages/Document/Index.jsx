@@ -118,8 +118,8 @@ export default function Document(props) {
                                     <div className="dropdown dropdown-end">
                                         <label tabIndex={0} className="btn btn-outline">Export</label>
                                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                            <li><a>XLSX</a></li>
-                                            <li><a>PDF</a></li>
+                                            <li><a href={route('docs.export', {type: 'excel'})} target='_blank'>XLSX</a></li>
+                                            <li><a href={route('docs.export', {type: 'pdf'})} target='_blank'>PDF</a></li>
                                         </ul>
                                     </div>
                                     )}

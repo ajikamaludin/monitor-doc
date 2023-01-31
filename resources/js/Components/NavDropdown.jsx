@@ -7,9 +7,11 @@ export default function NavDropdown({ name, items }) {
 
     return (
         <div className="dropdown">
-            <label tabIndex={0} className={`btn btn-ghost rounded-btn gap-2 ${active ? 'btn-active' : ''}`}>
-                {name}
-                <ArrowDownIcon/>
+            <label tabIndex={0} className={`btn btn-ghost rounded-btn ${active ? 'btn-active' : ''}`}>
+                <div className="flex flex-row gap-2 items-center">
+                    <div>{name}</div>
+                    <ArrowDownIcon/>
+                </div>
             </label>
             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
             {items.map((item, index) => (

@@ -59,7 +59,7 @@ export default function Authenticated({ auth, children, flash, notify }) {
                     <div className="px-2">
                         <a className="text-xl font-bold">Monitor Doc</a>
                     </div> 
-                    <div className="sm:flex px-6 hidden">
+                    <div className="lg:flex px-6 hidden">
                         <div className="flex items-stretch gap-2">
                             {routes.filter(r => r.show).map((item, index) => (
                                 <div key={index}>
@@ -77,11 +77,13 @@ export default function Authenticated({ auth, children, flash, notify }) {
                             ))}
                         </div>
                     </div>
-                    <div className="sm:flex justify-end flex-1 px-2 hidden">
+                    <div className="lg:flex justify-end flex-1 px-2 hidden">
                         <div className="dropdown dropdown-end">
-                            <label tabIndex={0} className="btn btn-ghost gap-2 m-1 normal-case">
-                                {auth.user.name}
-                                <ArrowDownIcon/>
+                            <label tabIndex={0} className="btn btn-ghost normal-case">
+                                <div className='flex flex-row gap-2 items-center'>
+                                    <div>{auth.user.name}</div>
+                                    <ArrowDownIcon/>
+                                </div>
                             </label>
                             <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                 <li>
@@ -92,7 +94,7 @@ export default function Authenticated({ auth, children, flash, notify }) {
                             </ul>
                         </div>
                     </div>
-                    <div className="flex-1 justify-end items-center sm:hidden">
+                    <div className="flex-1 justify-end items-center lg:hidden">
                         <button
                             onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
                             className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
@@ -117,7 +119,7 @@ export default function Authenticated({ auth, children, flash, notify }) {
                     </div>
                 </div>
 
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
+                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' lg:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
                         {routes.filter(r => r.show).map((item, index) => (
                             <div key={index}>

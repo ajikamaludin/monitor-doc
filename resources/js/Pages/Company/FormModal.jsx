@@ -76,7 +76,7 @@ export default function FormModal(props) {
             }
         >
             <div className="modal-box overflow-y-auto max-h-screen">
-                <h1 className="font-bold text-2xl pb-8">Jenis</h1>
+                <h1 className="font-bold text-2xl pb-8">Perusahaan</h1>
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text font-semibold">Nama</span>
