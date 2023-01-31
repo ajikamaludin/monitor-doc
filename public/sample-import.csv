@@ -1,3 +1,3 @@
 nama_perusahaan, jenis, kategori, no, nama, penerbit, tipe, tanggal_terbit,tanggal_jatuh_tempo, keterangan, file, status
-P1,J1,K1,0001,DOCAA,DIS,Tetap,30-01-2023,30-02-2023,-,-,Ya
-P1,J1,K1,0001,DOCAA,DIS,"Tidak Tetap",30-01-2023,30-02-2023,-,-,Tidak
+P1,J1,K1,0001,DOCAA,DIS,Tetap,"30-01-2023","21-02-2023",-,-,Ya
+P1,J1,K1,0001,DOCAA,DIS,"Tidak Tetap","30-01-2023","21-02-2023",-,-,Tidak

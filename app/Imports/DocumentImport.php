@@ -53,7 +53,8 @@ class DocumentImport implements ToCollection, WithHeadingRow
                 "company_id" => $company->id,
                 "type_id" => $type->id,
                 "category_id" => $cat->id,
-                "user_id" => auth()->user()->id
+                "user_id" => auth()->user()->id,
+                "created_at" => now()
             ]);
         }
 
