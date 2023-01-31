@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DocumentNotification;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class SettingController extends Controller
 {
@@ -23,5 +25,9 @@ class SettingController extends Controller
         Setting::where('key', 'DESTINATION_MAIL')->update([
             'value' => $request->email,
         ]);
+
+        if ($request->has('test')) {
+            Mail::to($request->email)->send(new DocumentNotification());
+        }
     }
 }

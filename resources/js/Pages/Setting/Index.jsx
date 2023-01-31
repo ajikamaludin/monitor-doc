@@ -23,6 +23,15 @@ export default function Dashboard(props) {
         })
     }
 
+    const handleSubmitAndTest = () => {
+        post(route('setting.update', { test: 'test' }), {
+            onSuccess: () =>
+                Promise.all([
+                    toast.success('The Data has been saved'),
+                ]),
+        })
+    }
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -32,8 +41,8 @@ export default function Dashboard(props) {
         >
             <Head title="Setting" />
 
-            <div className="flex flex-col w-full sm:px-6 lg:px-8 space-y-2">
-                <div className="card bg-base-100 w-full">
+            <div className="flex flex-row w-full justify-center sm:px-6 lg:px-8 space-y-2">
+                <div className="card bg-base-100 w-full max-w-md">
                     <div className="card-body">
                         <div className="form-control">
                             <label className="label">
@@ -59,6 +68,13 @@ export default function Dashboard(props) {
                             disabled={processing}
                         >
                             Simpan
+                        </div>
+                        <div
+                            onClick={handleSubmitAndTest}
+                            className="btn btn-secondary"
+                            disabled={processing}
+                        >
+                            Simpan & Test
                         </div>
                     </div>
                 </div>
