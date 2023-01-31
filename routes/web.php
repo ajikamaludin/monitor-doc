@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
+    Route::post("/docs/import", [DocumentController::class, 'import'])->name('docs.import');
     Route::get('/docs', [DocumentController::class, 'index'])->name('docs.index');
     Route::get('/docs/create', [DocumentController::class, 'create'])->name('docs.create');
     Route::post('/docs', [DocumentController::class, 'store'])->name('docs.store');

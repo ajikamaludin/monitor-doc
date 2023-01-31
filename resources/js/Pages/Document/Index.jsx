@@ -10,12 +10,15 @@ import Pagination from '@/Components/Pagination'
 import ModalConfirm from '@/Components/ModalConfirm'
 import { IconMenu } from '@/Icons'
 import { formatDate, hasPermission } from '@/utils'
+import ModalImport from './ModalImport'
 
 export default function Document(props) {
     const { data: docs, links } = props.docs
 
     const [search, setSearch] = useState({q: '', status: 0})
     const preValue = usePrevious(search)
+
+    const importModal = useModalState(false)
 
     const confirmModal = useModalState(false)
     const handleDelete = (doc) => {
@@ -88,7 +91,7 @@ export default function Document(props) {
                                 </Link>
                             )}
                             {canImport && (
-                                <div className='btn btn-outline'>
+                                <div className='btn btn-outline' onClick={importModal.toggle}>
                                     Import
                                 </div>
                             )}
@@ -120,6 +123,7 @@ export default function Document(props) {
                                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                             <li><a href={route('docs.export', {type: 'excel'})} target='_blank'>XLSX</a></li>
                                             <li><a href={route('docs.export', {type: 'pdf'})} target='_blank'>PDF</a></li>
+                                            <li><a href={route('docs.export', {type: ''})} target='_blank'>Print</a></li>
                                         </ul>
                                     </div>
                                     )}
@@ -174,7 +178,9 @@ export default function Document(props) {
                                     ))}
                                 </tbody>
                             </table>
-                            <Pagination links={links} params={search}/>
+                            <div className='w-full flex justify-center'>
+                                <Pagination links={links} params={search}/>
+                            </div>
                         </div>
                         
                     </div>
@@ -185,6 +191,9 @@ export default function Document(props) {
                 isOpen={confirmModal.isOpen}
                 toggle={confirmModal.toggle}
                 onConfirm={onDelete}
+            />
+            <ModalImport
+                modalState={importModal}
             />
         </AuthenticatedLayout>
     )

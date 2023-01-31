@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DocumentImport;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Document;
@@ -9,6 +10,7 @@ use App\Models\Type;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -44,8 +46,6 @@ class DocumentController extends Controller
 
         return inertia('Document/Index', [
             'docs' => $query->paginate(10),
-            'now' => now()->timezone('UTC'),
-            'now2' => now()->toDateTimeString(),
         ]);
     }
 
@@ -209,9 +209,13 @@ class DocumentController extends Controller
         $doc->delete();
     }
 
-    public function import()
+    public function import(Request $request)
     {
-        // 
+        $request->validate([
+            'file' => 'required|file'
+        ]);
+
+        Excel::import(new DocumentImport, $request->file);
     }
 
 
@@ -246,11 +250,17 @@ class DocumentController extends Controller
         if($request->type == 'excel') {
             return $this->exportAsExcel($collections);
         }
+        return $this->print($collections);
+    }
+
+    private function print($collections) {
+        return view('exports.documents', ['collections' => $collections->toArray()]);
     }
 
     private function exportAsPdf($collections) 
     {
-        $pdf = Pdf::loadView('exports.documents', ['collections' => $collections->toArray()]);
+        $pdf = Pdf::setPaper('legal', 'landscape');
+        $pdf->loadView('exports.documents', ['collections' => $collections->toArray()]);
         $date = now()->format('d-m-Y');
 
         return $pdf->download("documents-$date.pdf");
