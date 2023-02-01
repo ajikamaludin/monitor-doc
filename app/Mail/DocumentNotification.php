@@ -39,7 +39,7 @@ class DocumentNotification extends Mailable
 
         return $this->markdown('emails.document.notification', [
             'documents' => $docs,
-            'dueDocuments' => Document::whereDate('due_date', '<', now()->toDateString())->get()
+            'dueDocuments' => Document::whereDate('due_date', '<=', now()->toDateString())->get()
         ]);
     }
 }
