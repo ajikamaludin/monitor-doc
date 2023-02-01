@@ -82,6 +82,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
+    Route::post('/setting/add-cc', [SettingController::class, 'store'])->name('setting.add-cc');
+    Route::delete('/setting/add-cc/{mail}', [SettingController::class, 'destroy'])->name('setting.delete-cc');
 });
 
 require __DIR__.'/auth.php';

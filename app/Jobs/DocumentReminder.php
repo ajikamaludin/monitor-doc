@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\DocumentNotification;
 use App\Models\Setting;
+use App\Models\Mail as ModelsMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,6 +35,10 @@ class DocumentReminder implements ShouldQueue
     public function handle()
     {
         $email = Setting::where('key', 'DESTINATION_MAIL')->first();
-        Mail::to($email->value)->send(new DocumentNotification());
+        $users = ModelsMail::all()->pluck('value')->toArray();
+
+        Mail::to($email->value)
+            ->cc($users)
+            ->send(new DocumentNotification());
     }
 }

@@ -1,14 +1,18 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { toast } from 'react-toastify';
+import { useModalState } from '@/Hooks';
+import FormModal from './FormModal';
 
 export default function Dashboard(props) {
-    const { settings } = props
+    const { settings, ccs } = props
     const setting = settings.find(s => s.key === 'DESTINATION_MAIL' )
     const { data, setData, post,  processing, errors } = useForm({
         email: setting.value,
     })
+
+    const ccModal = useModalState()
 
     const handleOnChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
@@ -62,6 +66,20 @@ export default function Dashboard(props) {
                                 <span className="label-text-alt text-red-600">{errors.email}</span>
                             </label>
                         </div>
+                        <div className="form-control ">
+                            <label className="label">
+                                <span className="label-text font-semibold">CC:</span>
+                                <div className='btn btn-sm' onClick={ccModal.toggle}>+</div>
+                            </label>
+                            <div className='flex flex-col px-4 pb-4 gap-1'>
+                                {ccs.map(cc => (
+                                    <div className='flex flex-row justify-between' key={cc.id}>
+                                        <div>{cc.value}</div>
+                                        <Link className="btn btn-xs btn-circle btn-error" as='button' method='delete' href={route('setting.delete-cc', cc.id)}>x</Link>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                         <div
                             onClick={handleSubmit}
                             className="btn btn-primary"
@@ -79,6 +97,7 @@ export default function Dashboard(props) {
                     </div>
                 </div>
             </div>
+            <FormModal modalState={ccModal}/>
         </AuthenticatedLayout>
     );
 }
