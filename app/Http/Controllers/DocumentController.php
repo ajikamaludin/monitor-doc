@@ -22,7 +22,7 @@ class DocumentController extends Controller
 
         if ($request->has('status')) {
             if($request->status == 1) {
-                $query->whereDate('due_date', '<', now()->toDateString());
+                $query->whereDate('due_date', '<=', now()->toDateString());
             } 
             if($request->status == 2) {
                 $query->closeToExpired();
