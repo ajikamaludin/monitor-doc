@@ -21,7 +21,7 @@ class GeneralController extends Controller
 
         return inertia('Dashboard', [
             'count_active' => $count,
-            'count_update' => Document::whereDate('due_date', '<', now()->toDateString())->count(),
+            'count_update' => Document::whereDate('due_date', '<=', now()->toDateString())->count(),
         ]);
     }
 }
