@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Category;
+use App\Models\Classification;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Group;
@@ -78,6 +79,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'update-company', 'label' => 'Edit Perusahaan'],
             ['name' => 'create-company', 'label' => 'Buat Perusahaan'],
             ['name' => 'delete-company', 'label' => 'Hapus Perusahaan'],
+            ['name' => 'view-classification', 'label' => 'Lihat Klasifikasi'],
+            ['name' => 'update-classification', 'label' => 'Edit Klasifikasi'],
+            ['name' => 'create-classification', 'label' => 'Buat Klasifikasi'],
+            ['name' => 'delete-classification', 'label' => 'Hapus Klasifikasi'],
             ['name' => 'view-setting', 'label' => 'Setting'],
         ];
 
@@ -96,7 +101,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Type::create(['name' => 'Type 1']);
+        $classification = Classification::create(['name' => 'Klasifikasi 1']);
+        Type::create(['name' => 'Type 1', 'classification_id' => $classification->id]);
         Category::create(['name' => 'Category 1', 'short' => 'C1', 'duration' => 3]);
 
         Setting::create([

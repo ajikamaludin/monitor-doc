@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GeneralController;
@@ -58,6 +59,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
     Route::put('/companies/{company}', [CompanyController::class, 'update'])->name('companies.update');
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
+    
+    Route::get('/classifications', [ClassificationController::class, 'index'])->name('classifications.index');
+    Route::post('/classifications', [ClassificationController::class, 'store'])->name('classifications.store');
+    Route::put('/classifications/{classification}', [ClassificationController::class, 'update'])->name('classifications.update');
+    Route::delete('/classifications/{classification}', [ClassificationController::class, 'destroy'])->name('classifications.destroy');
 
     Route::get('/types', [TypeController::class, 'index'])->name('types.index');
     Route::post('/types', [TypeController::class, 'store'])->name('types.store');

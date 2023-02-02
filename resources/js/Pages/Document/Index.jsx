@@ -134,10 +134,12 @@ export default function Document(props) {
                             <table className="table w-full table-zebra">
                                 <thead>
                                     <tr>
+                                        <th>Perusahaan</th>
                                         <th className='hover:underline' onClick={() => sort('type_id')}>Jenis</th>
                                         <th className='hover:underline' onClick={() => sort('category_id')}>Ketegori</th>
                                         <th>No Dokumen</th>
                                         <th>Nama Dokumen</th>
+                                        <th className='hover:underline' onClick={() => sort('publish_date')}>Tanggal Terbit</th>
                                         <th className='hover:underline' onClick={() => sort('due_date')}>Tanggal Berakhir</th>
                                         <th>Catatan</th>
                                         <th></th>
@@ -146,15 +148,19 @@ export default function Document(props) {
                                 <tbody>
                                     {docs?.map((doc) => (
                                         <tr key={doc.id}>
+                                            <td>{doc.company.short}</td>
                                             <td>{doc.variety.name}</td>
                                             <td>{doc.category.name}</td>
                                             <td>{doc.no_doc}</td>
                                             <td>{doc.name}</td>
                                             <td>
+                                                {doc.publish_date !== null ? formatDate(doc.publish_date) : ''}
+                                            </td>
+                                            <td>
                                                 {doc.due_date !== null ? formatDate(doc.due_date) : ''}
                                             </td>
                                             <th>{doc.due_status}</th>
-                                            <td className='text-right'>
+                                            <td className='text-right w-1/8'>
                                                 <div className="dropdown dropdown-left">
                                                     <label tabIndex={0} className="btn btn-sm m-1 px-1"><IconMenu/></label>
                                                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">

@@ -18,7 +18,7 @@ class DocumentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Document::with(['variety', 'category']);
+        $query = Document::with(['variety', 'category', 'company']);
 
         if ($request->has('status')) {
             if($request->status == 1) {

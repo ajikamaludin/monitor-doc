@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.table td, .table th {
+  padding: 1rem;
+  vertical-align: middle;
+  white-space: normal;
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 5px;

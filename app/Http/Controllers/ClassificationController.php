@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classification;
-use App\Models\Type;
 use Illuminate\Http\Request;
 
-class TypeController extends Controller
+class ClassificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-        return inertia('Type/Index', [
-            'types' => Type::with(['classification'])->paginate(),
-            'classifications' => Classification::all()
+        return inertia('Classification/Index', [
+            'classifications' => Classification::paginate(),
         ]);
     }
 
@@ -30,14 +28,10 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'classification_id' => 'required|exists:classifications,id'
+            'name' => 'required|string|max:255'
         ]);
 
-        Type::create([
-            'name' => $request->name,
-            'classification_id' => $request->classification_id
-        ]);
+        Classification::create(['name' => $request->name]);
     }
 
     /**
@@ -47,17 +41,13 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(Request $request, Classification $classification)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'classification_id' => 'required|exists:classifications,id'
+            'name' => 'required|string|max:255'
         ]);
 
-        $type->update([
-            'name' => $request->name,
-            'classification_id' => $request->classification_id
-        ]);
+        $classification->update(['name' => $request->name]);
     }
 
     /**
@@ -66,8 +56,8 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Type $type)
+    public function destroy(Classification $classification)
     {
-        $type->delete();
+        $classification->delete();
     }
 }

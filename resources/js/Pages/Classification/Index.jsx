@@ -10,33 +10,33 @@ import Pagination from '@/Components/Pagination'
 import ModalConfirm from '@/Components/ModalConfirm'
 import FormModal from './FormModal'
 
-export default function Types(props) {
-    const { data: types, links } = props.types
+export default function Classification(props) {
+    const { data: classifications, links } = props.classifications
 
     const formModal = useModalState(false)
-    const toggle = (type = null) => {
-        formModal.setData(type)
+    const toggle = (classification = null) => {
+        formModal.setData(classification)
         formModal.toggle()
     }
 
     const confirmModal = useModalState(false)
-    const handleDelete = (type) => {
-        confirmModal.setData(type)
+    const handleDelete = (classification) => {
+        confirmModal.setData(classification)
         confirmModal.toggle()
     }
 
     const onDelete = () => {
-        const type = confirmModal.data
-        if(type != null) {
-            router.delete(route('types.destroy', type), {
+        const classification = confirmModal.data
+        if(classification != null) {
+            router.delete(route('classifications.destroy', classification), {
                 onSuccess: () => toast.success('The Data has been deleted'),
             })
         }
     }
 
-    const canCreate = hasPermission('create-type', props.auth.user)
-    const canUpdate = hasPermission('update-type', props.auth.user)
-    const canDelete = hasPermission('delete-type', props.auth.user)
+    const canCreate = hasPermission('create-classification', props.auth.user)
+    const canUpdate = hasPermission('update-classification', props.auth.user)
+    const canDelete = hasPermission('delete-classification', props.auth.user)
 
     return (
         <AuthenticatedLayout
@@ -65,22 +65,20 @@ export default function Types(props) {
                                     <tr>
                                         <th>Id</th>
                                         <th>Nama</th>
-                                        <th>Klasifikasi</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {types?.map((type) => (
-                                        <tr key={type.id}>
-                                            <th>{type.id}</th>
-                                            <td>{type.name}</td>
-                                            <td>{type?.classification?.name}</td>
+                                    {classifications?.map((classification) => (
+                                        <tr key={classification.id}>
+                                            <th>{classification.id}</th>
+                                            <td>{classification.name}</td>
                                             <td className="text-right">
                                                 {canUpdate && (
                                                     <div
                                                         className="btn btn-primary mx-1"
                                                         onClick={() =>
-                                                            toggle(type)
+                                                            toggle(classification)
                                                         }
                                                     >
                                                         Edit
@@ -90,7 +88,7 @@ export default function Types(props) {
                                                     <div
                                                         className="btn btn-secondary mx-1"
                                                         onClick={() =>
-                                                            handleDelete(type)
+                                                            handleDelete(classification)
                                                         }
                                                     >
                                                         Delete

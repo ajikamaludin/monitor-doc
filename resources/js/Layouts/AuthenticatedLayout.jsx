@@ -11,6 +11,7 @@ const rs = [
     {name: "Dokumen", show: true, items: [
         {name: "Dokumen", route: 'docs.index', show: true, permission: 'view-document'},
         {name: "Ketegori", route: 'categories.index', show: true, permission: 'view-category'},
+        {name: "Klasifikasi", route: 'classifications.index', show: true, permission: 'view-classification'},
         {name: "Jenis", route: 'types.index', show: true, permission: 'view-type'},
     ]},
     {name: "Perusahaan", show: true, items: [
