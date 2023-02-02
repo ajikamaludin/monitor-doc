@@ -13,7 +13,7 @@ export default function NavDropdown({ name, items }) {
                     <ArrowDownIcon/>
                 </div>
             </label>
-            <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
+            <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4 text-black">
             {items.map((item, index) => (
                 <li key={index}>
                     <Link href={route(item.route)}>{item.name}</Link>

@@ -55,8 +55,8 @@ export default function Authenticated({ auth, children, flash, notify }) {
 
     return (
         <div className="min-h-screen bg-base-200 pb-10">
-            <nav className="bg-base-100 border-b border-base-100">
-                <div className="navbar bg-base-100 rounded-box max-w-7xl m-auto px-6">
+            <nav className="bg-base-100 lg:bg-red-600 border-base-100 lg:border-red-600 lg:text-white">
+                <div className="navbar bg-base-100 lg:bg-red-600 rounded-box max-w-7xl m-auto px-6">
                     <div className="px-2">
                         <a className="text-xl font-bold">Monitor Doc</a>
                     </div> 
