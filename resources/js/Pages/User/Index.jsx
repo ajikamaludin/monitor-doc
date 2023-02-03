@@ -109,7 +109,9 @@ export default function Users(props) {
                                             <td>{user.email}</td>
                                             <td>{user?.role?.name}</td>
                                             <td>{user?.region?.group?.name}</td>
-                                            <td>{user?.region?.name}</td>
+                                            <td>
+                                                {user.region ? `${user?.region?.name} (${user?.region?.group?.name})` : ''}
+                                            </td>
                                             <td className="text-right">
                                                 {canUpdate && (
                                                     <div

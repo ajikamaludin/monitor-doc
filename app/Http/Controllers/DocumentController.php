@@ -43,6 +43,11 @@ class DocumentController extends Controller
             });
         }
 
+        if($request->user()->region_id != null) {
+            $companies = Company::where('region_id', $request->user()->region_id)->pluck('id')->toArray();
+            $query->whereIn('company_id', $companies);
+        }
+
         return inertia('Document/Index', [
             'docs' => $query->paginate(10),
         ]);

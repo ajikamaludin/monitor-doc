@@ -25,7 +25,7 @@ class UserController extends Controller
         return inertia('User/Index', [
             'users' => $query->paginate(10),
             'roles' => Role::all(),
-            'regions' => Region::all(),
+            'regions' => Region::with(['group'])->get(),
         ]);
     }
 

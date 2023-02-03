@@ -149,7 +149,7 @@ export default function UserFormModal(props) {
                         >
                             <option disabled value=""></option>
                             {regions.map(region => (
-                                <option key={region.id} value={region.id}>{region.name}</option>
+                                <option key={region.id} value={region.id}>{`${region.name} (${region.group.name})`}</option>
                             ))}
                         </select>
                         <label className="label">

@@ -73,7 +73,7 @@ export default function Types(props) {
                                     {regions?.map((region) => (
                                         <tr key={region.id}>
                                             <th>{region.id}</th>
-                                            <td>{region.name}</td>
+                                            <td>{`${region.name} (${region.group.name})`}</td>
                                             <td>{region.group.name}</td>
                                             <td className="text-right">
                                                 {canUpdate && (
