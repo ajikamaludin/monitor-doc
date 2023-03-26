@@ -18,7 +18,7 @@ class DocumentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Document::with(['variety', 'category', 'company']);
+        $query = Document::with(['variety', 'category', 'company.region']);
 
         if ($request->has('status')) {
             if($request->status == 1) {
@@ -79,11 +79,11 @@ class DocumentController extends Controller
             "publisher" => "required|string",
             "description" => "nullable",
             "publish_date" => "nullable|date",
-            "due_date" => "required_if:type,0",
+            "due_date" => "nullable|date",
             "status" => "required|in:0,1",
             "type" => "required|in:0,1",
             "company_id" => "required|exists:companies,id",
-            "document" => "required|file",
+            "document" => "nullable|file",
         ]);
 
         if($request->type == Document::TYPE_TIDAK_TETAP) {
@@ -115,9 +115,11 @@ class DocumentController extends Controller
             "user_id" => auth()->user()->id,
         ]);
 
-        $file = $request->file('document');
-        $file->store('documents', 'public');
-        $doc->document = $file->hashName();
+        if ($request->hasFile('document')) {
+            $file = $request->file('document');
+            $file->store('documents', 'public');
+            $doc->document = $file->hashName();
+        }
 
         $doc->save();
         
@@ -152,14 +154,14 @@ class DocumentController extends Controller
             "publisher" => "required|string",
             "description" => "nullable",
             "publish_date" => "nullable|date",
-            "due_date" => "required_if:type,1",
+            "due_date" => "nullable|date",
             "status" => "required|in:0,1",
             "type" => "required|in:0,1",
             "company_id" => "required|exists:companies,id",
             "document" => "nullable|file",
         ]);
 
-        if($request->type == Document::TYPE_TETAP) {
+        if($request->type == Document::TYPE_TIDAK_TETAP) {
             $request->validate([
                 "due_date" => "date|after_or_equal:".$request->publish_date
             ]);

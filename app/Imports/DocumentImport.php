@@ -39,14 +39,40 @@ class DocumentImport implements ToCollection, WithHeadingRow
             }
 
             $no += 1;
+
+            try {
+                $tanggal_terbit = Carbon::createFromFormat('d-m-Y',$row['tanggal_terbit']);
+                $tanggal_jatuh_tempo = Carbon::createFromFormat('d-m-Y',$row['tanggal_jatuh_tempo']);
+            } catch(\Exception $e) {
+                try {
+                    $tanggal_terbit = Carbon::createFromFormat('d/m/Y',$row['tanggal_terbit']);
+                    $tanggal_jatuh_tempo = Carbon::createFromFormat('d/m/Y',$row['tanggal_jatuh_tempo']);
+                } catch (\Exception $e) {
+                    try {
+                        $tanggal_terbit = Carbon::createFromFormat('m/d/Y',$row['tanggal_terbit']);
+                        $tanggal_jatuh_tempo = Carbon::createFromFormat('m/d/Y',$row['tanggal_jatuh_tempo']);
+                    } catch (\Exception $e) {
+                        try {
+                            $tanggal_terbit = Carbon::createFromFormat('m-d-Y',$row['tanggal_terbit']);
+                            $tanggal_jatuh_tempo = Carbon::createFromFormat('m-d-Y',$row['tanggal_jatuh_tempo']);
+                        } catch(\Exception $e) {
+                            try {
+                                $tanggal_terbit = Carbon::parse($row['tanggal_terbit']);
+                                $tanggal_jatuh_tempo = Carbon::parse($row['tanggal_jatuh_tempo']);
+                            } catch (\Exception $e) {}
+                        }
+                    }
+                }
+            }
+
             $documents->add([
                 "no" => $no,
                 "no_doc" => $row['no'],
                 "name" => $row['nama'],
                 "publisher" => $row['penerbit'],
                 "description" => $row['keterangan'],
-                "publish_date" => Carbon::createFromFormat('d-m-Y',$row['tanggal_terbit']),
-                "due_date" => Carbon::createFromFormat('d-m-Y',$row['tanggal_jatuh_tempo']),
+                "publish_date" => $tanggal_terbit,
+                "due_date" => $tanggal_jatuh_tempo,
                 "status" => $row['status'] == 'Ya' ? Document::STATUS_YES : Document::STATUS_NO,
                 "type" => $row['tipe'] == 'Tetap' ? Document::TYPE_TETAP : Document::TYPE_TIDAK_TETAP,
                 "document" => '',

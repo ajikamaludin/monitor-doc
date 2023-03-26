@@ -148,7 +148,7 @@ export default function Document(props) {
                                 <tbody>
                                     {docs?.map((doc) => (
                                         <tr key={doc.id}>
-                                            <td>{doc.company.short}</td>
+                                            <td>{doc.company.short} ({doc.company.region.name})</td>
                                             <td>{doc.variety.name}</td>
                                             <td>{doc.category.name}</td>
                                             <td>{doc.no_doc}</td>

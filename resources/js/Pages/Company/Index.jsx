@@ -74,7 +74,7 @@ export default function Types(props) {
                                     {companies?.map((company) => (
                                         <tr key={company.id}>
                                             <th>{company.id}</th>
-                                            <td>{company.name}</td>
+                                            <td>{company.name} ({company.region.name})</td>
                                             <td>{company.short}</td>
                                             <td>{company.region.name}</td>
                                             <td className="text-right">

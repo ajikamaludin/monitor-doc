@@ -30,7 +30,7 @@ class DocumentNotification extends Mailable
         $docs = collect();
         $categories = Category::all();
         foreach($categories as $category) {
-            foreach($category->documents()->get() as $doc) {
+            foreach($category->documents()->with(['variety'])->get() as $doc) {
                 if ($doc->is_close_due != 0) {
                     $docs->add($doc); 
                 }
@@ -39,7 +39,7 @@ class DocumentNotification extends Mailable
 
         return $this->markdown('emails.document.notification', [
             'documents' => $docs,
-            'dueDocuments' => Document::whereDate('due_date', '<=', now()->toDateString())->get()
+            'dueDocuments' => Document::with(['variety'])->whereDate('due_date', '<=', now()->toDateString())->get()
         ]);
     }
 }

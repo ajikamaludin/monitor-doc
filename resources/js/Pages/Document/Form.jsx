@@ -184,6 +184,7 @@ export default function FormDocument(props) {
                                 <TextInput
                                     type="date"
                                     name="publish_date"
+                                    placeholder='dd-mm-yyyy'
                                     value={data.publish_date}
                                     className="mt-1 block w-full"
                                     autoComplete={"false"}

@@ -16,8 +16,8 @@ class CompanyController extends Controller
     public function index()
     {
         return inertia('Company/Index', [
-            'companies' => Company::with(['region'])->paginate(),
-            'regions' => Region::all(),
+            'companies' => Company::with(['region.group'])->paginate(),
+            'regions' => Region::with(['group'])->get(),
         ]);
     }
 
