@@ -27,6 +27,10 @@ use App\Http\Controllers\UserController;
 |
 */
 
+Route::get('/mailable', function () {
+    return new App\Mail\DocumentNotification();
+});
+
 Route::get('/', function () {
     return redirect()->route('login');
 });

@@ -10,6 +10,7 @@ use App\Models\Type;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -107,8 +108,8 @@ class DocumentController extends Controller
             "category_id" => $request->category_id,
             "publisher" => $request->publisher,
             "description" => $request->description,
-            "publish_date" => $request->publish_date,
-            "due_date" => $request->due_date,
+            "publish_date" => $request->publish_date != '' ? Carbon::parse($request->publish_date)->toDateString() : null,
+            "due_date" => $request->due_date != '' ? Carbon::parse($request->due_date)->toDateString() : null,
             "status" => $request->status,
             "type" => $request->type,
             "company_id" => $request->company_id,
@@ -182,8 +183,8 @@ class DocumentController extends Controller
             "category_id" => $request->category_id,
             "publisher" => $request->publisher,
             "description" => $request->description,
-            "publish_date" => $request->publish_date,
-            "due_date" => $request->due_date,
+            "publish_date" => $request->publish_date != '' ? Carbon::parse($request->publish_date)->toDateString() : null,
+            "due_date" => $request->due_date != '' ? Carbon::parse($request->due_date)->toDateString() : null,
             "status" => $request->status,
             "type" => $request->type,
             "company_id" => $request->company_id,
