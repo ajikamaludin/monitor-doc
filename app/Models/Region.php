@@ -13,6 +13,7 @@ class Region extends Model
     protected $fillable = [
         "name",
         "group_id",
+        "email"
     ];
 
     protected $cascadeDeletes = ['companies', 'users'];

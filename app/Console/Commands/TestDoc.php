@@ -1,54 +1,37 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Console\Commands;
 
-use App\Mail\DocumentNotification;
 use App\Mail\DocumentRegionNotification;
 use App\Models\Category;
 use App\Models\Document;
-use App\Models\Setting;
-use App\Models\Mail as ModelsMail;
 use App\Models\Region;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
-class DocumentReminder implements ShouldQueue
+class TestDoc extends Command
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     /**
-     * Create a new job instance.
+     * The name and signature of the console command.
      *
-     * @return void
+     * @var string
      */
-    public function __construct()
-    {
-        //
-    }
+    protected $signature = 'test:doc';
 
     /**
-     * Execute the job.
+     * The console command description.
      *
-     * @return void
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
      */
     public function handle()
     {
-        Log::info('staring', ['send email']);
-        $email = Setting::where('key', 'DESTINATION_MAIL')->first();
-        $users = ModelsMail::all()->pluck('value')->toArray();
-
-        if ($email?->value != '') {
-            Mail::to($email->value)
-                ->cc($users)
-                ->send(new DocumentNotification());
-        }
-
         $docs = [];
         $categories = Category::all();
         foreach($categories as $category) {
@@ -62,7 +45,7 @@ class DocumentReminder implements ShouldQueue
         $regions = Region::all();
         foreach($regions as $region) {
             $rdocs = Document::with(['variety'])
-            ->whereHas('company', function ($query) use ($region) {
+            ->whereHas('creator', function ($query) use ($region) {
                 $query->where('region_id', $region->id);
             })
             ->whereDate('due_date', '<=', now()->toDateString());
@@ -80,5 +63,7 @@ class DocumentReminder implements ShouldQueue
                 Mail::to($region->email)->send(new DocumentRegionNotification($doc));
             }
         }
+
+        return Command::SUCCESS;
     }
 }

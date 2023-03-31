@@ -6,10 +6,10 @@ Reminder, untuk dokumen perlu diperhatikan :
 |No                       | Nama                  | Jenis                          | Status                      |
 | ----------------------- |:---------------------:|:------------------------------:| ---------------------------:|
 | @foreach($dueDocuments as $document) 
-| {{ $document->no_doc }} | {{ $document->name }} | {{ $document->variety->name }} | {{ $document->due_status }} |
+| {{ $document->no_doc }} | {{ $document->company->name }} | {{ $document->variety->name }} | {{ $document->due_status }} |
 | @endforeach
 |@foreach($documents as $document) 
-| {{ $document->no_doc }} | {{ $document->name }} | {{ $document->variety->name }} | {{ $document->due_status }} |
+| {{ $document->no_doc }} | {{ $document->company->name }} | {{ $document->variety->name }} | {{ $document->due_status }} |
 |@endforeach
 @endcomponent
 

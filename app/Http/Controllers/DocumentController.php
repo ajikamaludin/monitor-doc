@@ -74,7 +74,7 @@ class DocumentController extends Controller
     {
         $request->validate([
             "no_doc" => "nullable|string",
-            "name" => "required|string",
+            "name" => "nullable|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
@@ -149,7 +149,7 @@ class DocumentController extends Controller
     {
         $request->validate([
             "no_doc" => "nullable|string",
-            "name" => "required|string",
+            "name" => "nullable|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",

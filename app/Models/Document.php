@@ -74,16 +74,16 @@ class Document extends Model
                     return '';
                 }
                 if (now()->toDateString() == $this->due_date->toDateString()) {
-                    return "hari ini jatuh tempo";
+                    return "Hari ini jatuh tempo";
                 }
 
                 $date = now()->diffInDays($this->due_date, false) + 1;
 
                 if ($diff >= $date && $date > 0) {
-                    return $date . " hari mendekati jatuh tempo";
+                    return $date . " Hari mendekati jatuh tempo";
                 }
                 if ($date <= 0) {
-                    return "jatuh tempo";
+                    return "Jatuh tempo";
                 }
             },
         );

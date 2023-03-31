@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'delete-document', 'label' => 'Hapus Dokumen'],
             ['name' => 'import-document', 'label' => 'Import Dokumen'],
             ['name' => 'export-document', 'label' => 'Export Dokumen'],
+            ['name' => 'download-document', 'label' => 'Download Documen'],
             ['name' => 'view-category', 'label' => 'Lihat Kategori'],
             ['name' => 'update-category', 'label' => 'Edit Kategori'],
             ['name' => 'create-category', 'label' => 'Buat Kategori'],

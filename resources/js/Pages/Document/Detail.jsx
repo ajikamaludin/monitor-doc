@@ -5,11 +5,13 @@ import DocStatusItem from './DocStatusItem'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import InputLabel from '@/Components/InputLabel'
 import TextInput from '@/Components/TextInput'
-import { formatDate } from '@/utils'
+import { formatDate, hasPermission } from '@/utils'
 import { useModalState } from '@/Hooks'
 
 export default function FormDocument(props) {
     const { doc, doc_url }= props
+
+    const canDownload = hasPermission('download-document', props.auth.user)
 
     return (
         <AuthenticatedLayout
@@ -159,10 +161,12 @@ export default function FormDocument(props) {
                                         readOnly={true}
                                     />
                                 </div>
-                                <div className='mt-4'>
-                                    <InputLabel forInput="document" value="Dokumen" />
-                                    <a href={doc_url} className='btn btn-outline'>Download</a>
-                                </div>
+                                {canDownload && (
+                                    <div className='mt-4'>
+                                        <InputLabel forInput="document" value="Dokumen" />
+                                        <a href={doc_url} className='btn btn-outline'>Download</a>
+                                    </div>
+                                )}
                                 <div className='mt-4'>
                                     <div className="flex w-32 justify-between items-center">
                                         <InputLabel value="Status" />

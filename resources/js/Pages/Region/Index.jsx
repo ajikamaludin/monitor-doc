@@ -66,6 +66,7 @@ export default function Types(props) {
                                         <th>Id</th>
                                         <th>Nama</th>
                                         <th>Group</th>
+                                        <th>Email</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -75,6 +76,7 @@ export default function Types(props) {
                                             <th>{region.id}</th>
                                             <td>{`${region.name} (${region.group.name})`}</td>
                                             <td>{region.group.name}</td>
+                                            <td>{region.email}</td>
                                             <td className="text-right">
                                                 {canUpdate && (
                                                     <div
