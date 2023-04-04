@@ -243,9 +243,9 @@ class DocumentController extends Controller
                 'penerbit' => $document->publisher,
                 'tipe' => $document->type == Document::TYPE_TETAP ? 'Tetap' : 'Tidak Tetap',
                 'tanggal terbit' => $document->publish_date->format('d-m-Y'),
-                'tanggal jatuh tempo' => $document->due_date->format('d-m-Y'),
+                'tanggal jatuh tempo' => $document->due_date?->format('d-m-Y'),
                 'keterangan' => $document->description,
-                'file' => asset('documents/'.$document->document),
+                'file' => $document->document != null ? asset('documents/'.$document->document) : null,
                 'status' => $document->status == Document::STATUS_YES ? 'Ya' : 'Tidak',
                 'catatan' => $document->due_status,
             ]);

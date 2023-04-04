@@ -140,17 +140,19 @@ export default function FormDocument(props) {
                                         readOnly={true}
                                     />
                                 </div>
-                                <div className='mt-4'>
-                                    <InputLabel forInput="due_date" value="Tanggal Jatuh Tempo" />
-                                    <TextInput
-                                        type="text"
-                                        name="due_date"
-                                        value={formatDate(doc.due_date)}
-                                        className="mt-1 block w-full"
-                                        autoComplete={"false"}
-                                        readOnly={true}
-                                    />
-                                </div>
+                                {doc.due_date !== null && (
+                                    <div className='mt-4'>
+                                        <InputLabel forInput="due_date" value="Tanggal Jatuh Tempo" />
+                                        <TextInput
+                                            type="text"
+                                            name="due_date"
+                                            value={formatDate(doc.due_date)}
+                                            className="mt-1 block w-full"
+                                            autoComplete={"false"}
+                                            readOnly={true}
+                                        />
+                                    </div>
+                                )}
                                 <div className='mt-4'>
                                     <InputLabel forInput="description" value="Keterangan" />
                                     <TextInput

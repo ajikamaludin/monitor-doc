@@ -53,7 +53,11 @@
             <td style="width: 7%;">{{ $collec["tanggal jatuh tempo"] }}</td>
             <td >{{ $collec["keterangan"] }}</td>
             <td >
+                @if($collec["file"] != null)
                 <a href='{{ $collec["file"] }}'>Download</a>
+                @else 
+                Belum ada file
+                @endif
             </td>
             <td >{{ $collec["status"] }}</td>
             <td >{{ $collec["catatan"] }}</td>
