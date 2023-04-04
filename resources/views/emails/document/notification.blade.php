@@ -3,7 +3,7 @@
 
 Reminder, untuk dokumen perlu diperhatikan :
 @component('mail::table')
-|No                       | Nama                  | Jenis                          | Status                      |
+|No                       | Perusahaan            | Jenis                          | Status                      |
 | ----------------------- |:---------------------:|:------------------------------:| ---------------------------:|
 | @foreach($dueDocuments as $document) 
 | {{ $document->no_doc }} | {{ $document->company->name }} | {{ $document->variety->name }} | {{ $document->due_status }} |
