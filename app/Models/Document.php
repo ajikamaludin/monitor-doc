@@ -42,7 +42,7 @@ class Document extends Model
         'due_date' => 'datetime:Y-m-d'
     ];
 
-    protected $appends = ['due_status'];
+    protected $appends = ['due_status', 'due_status_color'];
 
     public function creator()
     {
@@ -67,33 +67,63 @@ class Document extends Model
     protected function dueStatus(): Attribute
     {
         return Attribute::make(
-            get: function() {
-                $diff = $this->category->duration;
+            get: function () {
+                $maxMonthDiff = 3;
+                $maxDayDiff = 30; //$this->category->duration;
 
                 if ($this->due_date == null) {
                     return '';
                 }
+
                 if (now()->toDateString() == $this->due_date->toDateString()) {
                     return "hari ini jatuh tempo";
                 }
 
-                $date = now()->diffInDays($this->due_date, false) + 1;
+                $diffMonth = now()->diffInMonths($this->due_date, true);
 
-                if ($diff >= $date && $date > 0) {
-                    return $date . " hari mendekati jatuh tempo";
+                if ($maxMonthDiff >= $diffMonth && $diffMonth > 0) {
+                    return $diffMonth . " bulan mendekati jatuh tempo";
                 }
-                if ($date <= 0) {
+
+                $diffDays = now()->diffInDays($this->due_date, false);
+
+                if ($maxDayDiff >= $diffDays && $diffDays > 0) {
+                    return $diffDays . " hari mendekati jatuh tempo";
+                }
+                if ($diffDays <= 0) {
                     return "jatuh tempo";
                 }
-            },
+            }
+        );
+    }
+
+    protected function dueStatusColor(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $maxMonthDiff = 3;
+
+                $diffMonth = now()->diffInMonths($this->due_date, true);
+
+                if ($maxMonthDiff >= $diffMonth && $diffMonth > 0) {
+                    return [
+                        1 => '#dc2626',
+                        2 => '#facc15',
+                        3 => '#4ade80',
+                    ][$diffMonth];
+                }
+
+                return '#dc2626';
+            }
         );
     }
 
     protected function isCloseDue(): Attribute
     {
         return Attribute::make(
-            get: function() {
-                $diff = $this->category->duration;
+            get: function () {
+                $maxMonthDiff = 3;
+                $diff = 30; //$this->category->duration;
 
                 if ($this->due_date == null) {
                     return 0;
@@ -103,12 +133,19 @@ class Document extends Model
                     return 0;
                 }
 
-                $date = now()->diffInDays($this->due_date, false) + 1;
+                $diffMonth = now()->diffInMonths($this->due_date, true);
 
-                if ($diff >= $date && $date > 0) {
-                    return $date;
+                if ($maxMonthDiff >= $diffMonth && $diffMonth > 0) {
+                    return $diffMonth;
                 }
-                if ($date <= 0) {
+
+                $diffDays = now()->diffInDays($this->due_date, false) + 1;
+
+                if ($diff >= $diffDays && $diffDays > 0) {
+                    return $diffDays;
+                }
+
+                if ($diffDays <= 0) {
                     return 0;
                 }
 
@@ -117,11 +154,12 @@ class Document extends Model
         );
     }
 
-    public function scopeCloseToExpired($query) {
+    public function scopeCloseToExpired($query)
+    {
         $ids = collect();
         $categories = Category::all();
-        foreach($categories as $category) {
-            foreach($category->documents as $docs) {
+        foreach ($categories as $category) {
+            foreach ($category->documents as $docs) {
                 if ($docs->is_close_due != 0) {
                     $ids->add($docs->id);
                 }

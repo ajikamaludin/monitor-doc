@@ -15,7 +15,7 @@ import ModalImport from './ModalImport'
 export default function Document(props) {
     const { data: docs, links } = props.docs
 
-    const [search, setSearch] = useState({q: '', status: 0})
+    const [search, setSearch] = useState({ q: '', status: 0 })
     const preValue = usePrevious(search)
 
     const importModal = useModalState(false)
@@ -28,7 +28,7 @@ export default function Document(props) {
 
     const onDelete = () => {
         const doc = confirmModal.data
-        if(doc != null) {
+        if (doc != null) {
             router.delete(route('docs.destroy', doc), {
                 onSuccess: () => toast.success('The Data has been deleted'),
             })
@@ -46,20 +46,16 @@ export default function Document(props) {
         setSearch({
             ...search,
             sortBy: key,
-            sortRule: search.sortRule == 'asc' ? 'desc' : 'asc'
+            sortRule: search.sortRule == 'asc' ? 'desc' : 'asc',
         })
     }
 
     useEffect(() => {
         if (preValue) {
-            router.get(
-                route(route().current()),
-                search,
-                {
-                    replace: true,
-                    preserveState: true,
-                }
-            )
+            router.get(route(route().current()), search, {
+                replace: true,
+                preserveState: true,
+            })
         }
     }, [search])
 
@@ -81,51 +77,130 @@ export default function Document(props) {
                 <div className="card bg-base-100 w-full">
                     <div className="card-body">
                         <div className="flex flex-col md:flex-row w-full mb-4 justify-between space-y-1 md:space-y-0">
-                            <div className='flex flex-row gap-2'>
-                            {canCreate && (
-                                <Link
-                                    className="btn btn-neutral"
-                                    href={route('docs.create')}
-                                >
-                                    Tambah
-                                </Link>
-                            )}
-                            {canImport && (
-                                <div className='btn btn-outline' onClick={importModal.toggle}>
-                                    Import
-                                </div>
-                            )}
+                            <div className="flex flex-row gap-2">
+                                {canCreate && (
+                                    <Link
+                                        className="btn btn-neutral"
+                                        href={route('docs.create')}
+                                    >
+                                        Tambah
+                                    </Link>
+                                )}
+                                {canImport && (
+                                    <div
+                                        className="btn btn-outline"
+                                        onClick={importModal.toggle}
+                                    >
+                                        Import
+                                    </div>
+                                )}
                             </div>
-                            <div className='flex md:flex-row flex-col gap-2'>
+                            <div className="flex md:flex-row flex-col gap-2">
                                 <div className="form-control w-full">
                                     <input
                                         type="text"
                                         className="input input-bordered"
                                         value={search.q}
                                         onChange={(e) =>
-                                            handleFilter({q: e.target.value})
+                                            handleFilter({ q: e.target.value })
                                         }
                                         placeholder="Search"
                                     />
                                 </div>
-                                <div className='flex flex-row gap-2'>
+                                <div className="flex flex-row gap-2">
                                     <div className="dropdown dropdown-end">
-                                        <label tabIndex={0} className="btn btn-outline">Filter</label>
-                                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                            <li><div onClick={() => handleFilter({status: 0})}>Semua</div></li>
-                                            <li><div onClick={() => handleFilter({status: 1})}>Jatuh Tempo</div></li>
-                                            <li><div onClick={() => handleFilter({status: 2})}>Mendekati Jatuh Tempo</div></li>
+                                        <label
+                                            tabIndex={0}
+                                            className="btn btn-outline"
+                                        >
+                                            Filter
+                                        </label>
+                                        <ul
+                                            tabIndex={0}
+                                            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                                        >
+                                            <li>
+                                                <div
+                                                    onClick={() =>
+                                                        handleFilter({
+                                                            status: 0,
+                                                        })
+                                                    }
+                                                >
+                                                    Semua
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div
+                                                    onClick={() =>
+                                                        handleFilter({
+                                                            status: 1,
+                                                        })
+                                                    }
+                                                >
+                                                    Jatuh Tempo
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div
+                                                    onClick={() =>
+                                                        handleFilter({
+                                                            status: 2,
+                                                        })
+                                                    }
+                                                >
+                                                    Mendekati Jatuh Tempo
+                                                </div>
+                                            </li>
                                         </ul>
                                     </div>
                                     {canExport && (
-                                    <div className="dropdown dropdown-end">
-                                        <label tabIndex={0} className="btn btn-outline">Export</label>
-                                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                            <li><a href={route('docs.export', {type: 'excel'})} target='_blank'>XLSX</a></li>
-                                            <li><a href={route('docs.export', {type: 'pdf'})} target='_blank'>PDF</a></li>
-                                            <li><a href={route('docs.export', {type: ''})} target='_blank'>Print</a></li>
-                                        </ul>
-                                    </div>
+                                        <div className="dropdown dropdown-end">
+                                            <label
+                                                tabIndex={0}
+                                                className="btn btn-outline"
+                                            >
+                                                Export
+                                            </label>
+                                            <ul
+                                                tabIndex={0}
+                                                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                                            >
+                                                <li>
+                                                    <a
+                                                        href={route(
+                                                            'docs.export',
+                                                            { type: 'excel' }
+                                                        )}
+                                                        target="_blank"
+                                                    >
+                                                        XLSX
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href={route(
+                                                            'docs.export',
+                                                            { type: 'pdf' }
+                                                        )}
+                                                        target="_blank"
+                                                    >
+                                                        PDF
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href={route(
+                                                            'docs.export',
+                                                            { type: '' }
+                                                        )}
+                                                        target="_blank"
+                                                    >
+                                                        Print
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -135,12 +210,32 @@ export default function Document(props) {
                                 <thead>
                                     <tr>
                                         <th>Perusahaan</th>
-                                        <th className='hover:underline' onClick={() => sort('type_id')}>Jenis</th>
-                                        <th className='hover:underline' onClick={() => sort('category_id')}>Ketegori</th>
+                                        <th
+                                            className="hover:underline"
+                                            onClick={() => sort('type_id')}
+                                        >
+                                            Jenis
+                                        </th>
+                                        <th
+                                            className="hover:underline"
+                                            onClick={() => sort('category_id')}
+                                        >
+                                            Ketegori
+                                        </th>
                                         <th>No Dokumen</th>
                                         <th>Nama Dokumen</th>
-                                        <th className='hover:underline' onClick={() => sort('publish_date')}>Tanggal Terbit</th>
-                                        <th className='hover:underline' onClick={() => sort('due_date')}>Tanggal Berakhir</th>
+                                        <th
+                                            className="hover:underline"
+                                            onClick={() => sort('publish_date')}
+                                        >
+                                            Tanggal Terbit
+                                        </th>
+                                        <th
+                                            className="hover:underline"
+                                            onClick={() => sort('due_date')}
+                                        >
+                                            Tanggal Berakhir
+                                        </th>
                                         <th>Catatan</th>
                                         <th></th>
                                     </tr>
@@ -148,33 +243,79 @@ export default function Document(props) {
                                 <tbody>
                                     {docs?.map((doc) => (
                                         <tr key={doc.id}>
-                                            <td>{doc.company.short} ({doc.company.region.name})</td>
+                                            <td>
+                                                {doc.company.short} (
+                                                {doc.company.region.name})
+                                            </td>
                                             <td>{doc.variety.name}</td>
                                             <td>{doc.category.name}</td>
                                             <td>{doc.no_doc}</td>
                                             <td>{doc.name}</td>
                                             <td>
-                                                {doc.publish_date !== null ? formatDate(doc.publish_date) : ''}
+                                                {doc.publish_date !== null
+                                                    ? formatDate(
+                                                          doc.publish_date
+                                                      )
+                                                    : ''}
                                             </td>
                                             <td>
-                                                {doc.due_date !== null ? formatDate(doc.due_date) : ''}
+                                                {doc.due_date !== null
+                                                    ? formatDate(doc.due_date)
+                                                    : ''}
                                             </td>
-                                            <th>{doc.due_status}</th>
-                                            <td className='text-right w-1/8'>
+                                            <th
+                                                style={{
+                                                    color: doc.due_status_color,
+                                                }}
+                                            >
+                                                {doc.due_status}
+                                            </th>
+                                            <td className="text-right w-1/8">
                                                 <div className="dropdown dropdown-left">
-                                                    <label tabIndex={0} className="btn btn-sm m-1 px-1"><IconMenu/></label>
-                                                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                                    <label
+                                                        tabIndex={0}
+                                                        className="btn btn-sm m-1 px-1"
+                                                    >
+                                                        <IconMenu />
+                                                    </label>
+                                                    <ul
+                                                        tabIndex={0}
+                                                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                                                    >
                                                         <li>
-                                                            <Link href={route('docs.show', doc)}>Detail</Link>
+                                                            <Link
+                                                                href={route(
+                                                                    'docs.show',
+                                                                    doc
+                                                                )}
+                                                            >
+                                                                Detail
+                                                            </Link>
                                                         </li>
                                                         {canUpdate && (
                                                             <li>
-                                                                <Link href={route('docs.edit', doc)}>Edit</Link>
+                                                                <Link
+                                                                    href={route(
+                                                                        'docs.edit',
+                                                                        doc
+                                                                    )}
+                                                                >
+                                                                    Edit
+                                                                </Link>
                                                             </li>
                                                         )}
                                                         {canDelete && (
-                                                            <li onClick={() => handleDelete(doc)} className="bg-error ">
-                                                                <div>Delete</div>
+                                                            <li
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        doc
+                                                                    )
+                                                                }
+                                                                className="bg-error "
+                                                            >
+                                                                <div>
+                                                                    Delete
+                                                                </div>
                                                             </li>
                                                         )}
                                                     </ul>
@@ -184,23 +325,20 @@ export default function Document(props) {
                                     ))}
                                 </tbody>
                             </table>
-                            <div className='w-full flex justify-center'>
-                                <Pagination links={links} params={search}/>
+                            <div className="w-full flex justify-center">
+                                <Pagination links={links} params={search} />
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
-            
+
             <ModalConfirm
                 isOpen={confirmModal.isOpen}
                 toggle={confirmModal.toggle}
                 onConfirm={onDelete}
             />
-            <ModalImport
-                modalState={importModal}
-            />
+            <ModalImport modalState={importModal} />
         </AuthenticatedLayout>
     )
 }
