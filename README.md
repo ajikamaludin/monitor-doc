@@ -6,9 +6,10 @@ This is a project about web application to monitor and send email notification f
 
 <a href="https://trakteer.id/ajikamaludin" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-blue-2.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
 
-## What is flavor ? 
-- this is another version from this application request from someone im changes many this
-from here i think i get a good template for another project that i can work for.
+## What is flavor ?
+
+-   this is another version from this application request from someone im changes many this
+    from here i think i get a good template for another project that i can work for.
 
 ## Requirements
 
@@ -42,3 +43,9 @@ $ npm run build
 
 ![](1.png?raw=true)
 ![](2.png?raw=true)
+
+## Rsync
+
+```bash
+rsync -arP -e 'ssh -p 222' --exclude=node_modules --exclude=.git --exclude=.env --exclude=storage --exclude=public/hot . pi@ajikamaludin.id:/home/pi/projects/monitor-doc
+```

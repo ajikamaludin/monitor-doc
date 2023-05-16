@@ -22,10 +22,10 @@ class DocumentController extends Controller
         $query = Document::with(['variety', 'category', 'company.region']);
 
         if ($request->has('status')) {
-            if($request->status == 1) {
+            if ($request->status == 1) {
                 $query->whereDate('due_date', '<=', now()->toDateString());
-            } 
-            if($request->status == 2) {
+            }
+            if ($request->status == 2) {
                 $query->closeToExpired();
             }
         }
@@ -33,18 +33,18 @@ class DocumentController extends Controller
         if ($request->has('sortBy') && $request->has('sortRule')) {
             $query->orderBy($request->sortBy, $request->sortRule);
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('updated_at', 'desc');
         }
 
         if ($request->q != null || $request->q != '') {
             $query->where(function ($query) use ($request) {
-                $query->where('no_doc', 'like', '%'.$request->q.'%')
-                ->orWhere('name', 'like', '%'.$request->q.'%')
-                ->orWhere('no', 'like', '%'.$request->q.'%');
+                $query->where('no_doc', 'like', '%' . $request->q . '%')
+                    ->orWhere('name', 'like', '%' . $request->q . '%')
+                    ->orWhere('no', 'like', '%' . $request->q . '%');
             });
         }
 
-        if($request->user()->region_id != null) {
+        if ($request->user()->region_id != null) {
             $companies = Company::where('region_id', $request->user()->region_id)->pluck('id')->toArray();
             $query->whereIn('company_id', $companies);
         }
@@ -87,13 +87,13 @@ class DocumentController extends Controller
             "document" => "nullable|file",
         ]);
 
-        if($request->type == Document::TYPE_TIDAK_TETAP) {
+        if ($request->type == Document::TYPE_TIDAK_TETAP) {
             $request->validate([
-                "due_date" => "date|after_or_equal:".$request->publish_date
+                "due_date" => "date|after_or_equal:" . $request->publish_date
             ]);
         }
 
-        if($request->status == Document::STATUS_YES) {
+        if ($request->status == Document::STATUS_YES) {
             $request->validate([
                 "no_doc" => "required|string",
                 "publish_date" => "required|date",
@@ -123,9 +123,9 @@ class DocumentController extends Controller
         }
 
         $doc->save();
-        
+
         return redirect()->route("docs.index")
-                ->with('message', ['type' => 'success', 'message' => 'The data has beed saved']);
+            ->with('message', ['type' => 'success', 'message' => 'The data has beed saved']);
     }
 
     public function edit(Document $doc)
@@ -136,7 +136,7 @@ class DocumentController extends Controller
         } else {
             $companies = Company::where('region_id', $user->region_id)->get();
         }
-    
+
         return inertia('Document/Form', [
             'companies' => $companies,
             'types' => Type::all(),
@@ -162,13 +162,13 @@ class DocumentController extends Controller
             "document" => "nullable|file",
         ]);
 
-        if($request->type == Document::TYPE_TIDAK_TETAP) {
+        if ($request->type == Document::TYPE_TIDAK_TETAP) {
             $request->validate([
-                "due_date" => "date|after_or_equal:".$request->publish_date
+                "due_date" => "date|after_or_equal:" . $request->publish_date
             ]);
         }
 
-        if($request->status == Document::STATUS_YES) {
+        if ($request->status == Document::STATUS_YES) {
             $request->validate([
                 "no_doc" => "required|string",
                 "publish_date" => "required|date",
@@ -200,14 +200,14 @@ class DocumentController extends Controller
         $doc->save();
 
         return redirect()->route("docs.index")
-                ->with('message', ['type' => 'success', 'message' => 'The data has beed updated']);
+            ->with('message', ['type' => 'success', 'message' => 'The data has beed updated']);
     }
 
     public function show(Document $doc)
     {
         return inertia('Document/Detail', [
             'doc' => $doc->load(['variety', 'category', 'company.region.group']),
-            'doc_url' => asset('documents/'.$doc->document),
+            'doc_url' => asset('documents/' . $doc->document),
         ]);
     }
 
@@ -245,26 +245,27 @@ class DocumentController extends Controller
                 'tanggal terbit' => $document->publish_date->format('d-m-Y'),
                 'tanggal jatuh tempo' => $document->due_date->format('d-m-Y'),
                 'keterangan' => $document->description,
-                'file' => asset('documents/'.$document->document),
+                'file' => asset('documents/' . $document->document),
                 'status' => $document->status == Document::STATUS_YES ? 'Ya' : 'Tidak',
                 'catatan' => $document->due_status,
             ]);
         }
 
-        if($request->type == 'pdf') {
+        if ($request->type == 'pdf') {
             return $this->exportAsPdf($collections);
         }
-        if($request->type == 'excel') {
+        if ($request->type == 'excel') {
             return $this->exportAsExcel($collections);
         }
         return $this->print($collections);
     }
 
-    private function print($collections) {
+    private function print($collections)
+    {
         return view('exports.documents', ['collections' => $collections->toArray()]);
     }
 
-    private function exportAsPdf($collections) 
+    private function exportAsPdf($collections)
     {
         $pdf = Pdf::setPaper('legal', 'landscape');
         $pdf->loadView('exports.documents', ['collections' => $collections->toArray()]);
