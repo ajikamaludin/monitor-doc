@@ -79,7 +79,7 @@ class Document extends Model
                     return "hari ini jatuh tempo";
                 }
 
-                $diffMonth = now()->diffInMonths($this->due_date, true);
+                $diffMonth = now()->diffInMonths($this->due_date, false);
 
                 if ($maxMonthDiff >= $diffMonth && $diffMonth > 0) {
                     return $diffMonth . " bulan mendekati jatuh tempo";
@@ -103,7 +103,7 @@ class Document extends Model
             get: function () {
                 $maxMonthDiff = 3;
 
-                $diffMonth = now()->diffInMonths($this->due_date, true);
+                $diffMonth = now()->diffInMonths($this->due_date, false);
 
                 if ($maxMonthDiff >= $diffMonth && $diffMonth > 0) {
                     return [
