@@ -277,10 +277,10 @@ class DocumentController extends Controller
     private function exportAsExcel($collections)
     {
         $date = now()->format('d-m-Y');
-        $header_style = (new StyleBuilder())->setFontBold()->build();
+        // $header_style = (new StyleBuilder())->setFontBold()->build();
 
         return (new FastExcel($collections))
-            ->headerStyle($header_style)
+            // ->headerStyle($header_style)
             ->download("document-$date.xlsx");
     }
 }
