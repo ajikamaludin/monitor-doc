@@ -8,7 +8,8 @@ export default function FormModal(props) {
 
     const { data, setData, post, put, processing, errors, reset, clearErrors } = useForm({
         name: '',
-        group_id: ''
+        group_id: '',
+        email: '',
     })
 
     const handleOnChange = (event) => {
@@ -54,7 +55,8 @@ export default function FormModal(props) {
         if (region !== null) {
             setData({
                 name: region?.name,
-                group_id: region?.group_id
+                group_id: region?.group_id,
+                email: region?.email,
             })
         }
     }, [modalState])
@@ -114,6 +116,24 @@ export default function FormModal(props) {
                         <span className="label-text-alt">
                             {errors.group_id}
                         </span>
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text font-semibold">Email</span>
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="email"
+                        className={`input input-bordered ${
+                            errors.email && 'input-error'
+                        }`}
+                        name="email"
+                        value={data.email}
+                        onChange={handleOnChange}
+                    />
+                    <label className="label">
+                        <span className="label-text-alt text-red-600">{errors.email}</span>
                     </label>
                 </div>
                 <div className="modal-action">

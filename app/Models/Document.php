@@ -11,11 +11,11 @@ class Document extends Model
 {
     use HasFactory;
 
-    const STATUS_YES = 1;
-    const STATUS_NO = 0;
+    public const STATUS_YES = 1;
+    public const STATUS_NO = 0;
 
-    const TYPE_TETAP = 1;
-    const TYPE_TIDAK_TETAP = 0;
+    public const TYPE_TETAP = 1;
+    public const TYPE_TIDAK_TETAP = 0;
 
     protected $fillable = [
         "no",
@@ -76,22 +76,16 @@ class Document extends Model
                 }
 
                 if (now()->toDateString() == $this->due_date->toDateString()) {
-                    return "hari ini jatuh tempo";
+                    return "Hari ini jatuh tempo";
                 }
 
                 $diffMonth = now()->diffInMonths($this->due_date, false);
 
-                if ($maxMonthDiff >= $diffMonth && $diffMonth > 0) {
-                    return $diffMonth . " bulan mendekati jatuh tempo";
+                if ($diff >= $date && $date > 0) {
+                    return $date . " Hari mendekati jatuh tempo";
                 }
-
-                $diffDays = now()->diffInDays($this->due_date, false);
-
-                if ($maxDayDiff >= $diffDays && $diffDays > 0) {
-                    return $diffDays . " hari mendekati jatuh tempo";
-                }
-                if ($diffDays <= 0) {
-                    return "jatuh tempo";
+                if ($date <= 0) {
+                    return "Jatuh tempo";
                 }
             }
         );

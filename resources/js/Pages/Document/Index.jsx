@@ -223,19 +223,9 @@ export default function Document(props) {
                                             Ketegori
                                         </th>
                                         <th>No Dokumen</th>
-                                        <th>Nama Dokumen</th>
-                                        <th
-                                            className="hover:underline"
-                                            onClick={() => sort('publish_date')}
-                                        >
-                                            Tanggal Terbit
-                                        </th>
-                                        <th
-                                            className="hover:underline"
-                                            onClick={() => sort('due_date')}
-                                        >
-                                            Tanggal Berakhir
-                                        </th>
+                                        {/* <th>Nama Dokumen</th> */}
+                                        <th className='hover:underline' onClick={() => sort('publish_date')}>Tanggal Terbit</th>
+                                        <th className='hover:underline' onClick={() => sort('due_date')}>Tanggal Berakhir</th>
                                         <th>Catatan</th>
                                         <th></th>
                                     </tr>
@@ -250,7 +240,7 @@ export default function Document(props) {
                                             <td>{doc.variety.name}</td>
                                             <td>{doc.category.name}</td>
                                             <td>{doc.no_doc}</td>
-                                            <td>{doc.name}</td>
+                                            {/* <td>{doc.name}</td> */}
                                             <td>
                                                 {doc.publish_date !== null
                                                     ? formatDate(

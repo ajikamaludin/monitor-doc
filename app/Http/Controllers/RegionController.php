@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RegionController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -31,12 +31,14 @@ class RegionController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'group_id' => 'required|exists:groups,id'
+            'group_id' => 'required|exists:groups,id',
+            'email' => 'required|email',
         ]);
 
         Region::create([
             'group_id' => $request->group_id,
-            'name' => $request->name
+            'name' => $request->name,
+            'email' => $request->email
         ]);
     }
 
@@ -51,12 +53,14 @@ class RegionController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'group_id' => 'required|exists:groups,id'
+            'group_id' => 'required|exists:groups,id',
+            'email' => 'required|email',
         ]);
 
         $region->update([
             'group_id' => $request->group_id,
-            'name' => $request->name
+            'name' => $request->name,
+            'email' => $request->email
         ]);
     }
 

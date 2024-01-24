@@ -140,7 +140,7 @@ export default function FormDocument(props) {
                                 />
                                 <InputError message={errors.no_doc}/>
                             </div>
-                            <div className='mt-4'>
+                            {/* <div className='mt-4'>
                                 <InputLabel forInput="name" value="Nama Dokumen" />
                                 <TextInput
                                     type="text"
@@ -152,7 +152,7 @@ export default function FormDocument(props) {
                                     isError={errors.name}
                                 />
                                 <InputError message={errors.name}/>
-                            </div>
+                            </div> */}
                             <div className='mt-4'>
                                 <InputLabel forInput="publisher" value="Penerbit" />
                                 <TextInput

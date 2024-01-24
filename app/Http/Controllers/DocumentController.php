@@ -74,7 +74,7 @@ class DocumentController extends Controller
     {
         $request->validate([
             "no_doc" => "nullable|string",
-            "name" => "required|string",
+            "name" => "nullable|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
@@ -149,7 +149,7 @@ class DocumentController extends Controller
     {
         $request->validate([
             "no_doc" => "nullable|string",
-            "name" => "required|string",
+            "name" => "nullable|string",
             "type_id" => "required|exists:types,id",
             "category_id" => "required|exists:categories,id",
             "publisher" => "required|string",
@@ -222,7 +222,7 @@ class DocumentController extends Controller
             'file' => 'required|file'
         ]);
 
-        Excel::import(new DocumentImport, $request->file);
+        Excel::import(new DocumentImport(), $request->file);
     }
 
 
@@ -243,9 +243,9 @@ class DocumentController extends Controller
                 'penerbit' => $document->publisher,
                 'tipe' => $document->type == Document::TYPE_TETAP ? 'Tetap' : 'Tidak Tetap',
                 'tanggal terbit' => $document->publish_date->format('d-m-Y'),
-                'tanggal jatuh tempo' => $document->due_date->format('d-m-Y'),
+                'tanggal jatuh tempo' => $document->due_date?->format('d-m-Y'),
                 'keterangan' => $document->description,
-                'file' => asset('documents/' . $document->document),
+                'file' => $document->document != null ? asset('documents/'.$document->document) : null,
                 'status' => $document->status == Document::STATUS_YES ? 'Ya' : 'Tidak',
                 'catatan' => $document->due_status,
             ]);
@@ -277,10 +277,8 @@ class DocumentController extends Controller
     private function exportAsExcel($collections)
     {
         $date = now()->format('d-m-Y');
-        // $header_style = (new StyleBuilder())->setFontBold()->build();
 
         return (new FastExcel($collections))
-            // ->headerStyle($header_style)
             ->download("document-$date.xlsx");
     }
 }
