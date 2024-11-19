@@ -13,7 +13,7 @@ This is a project about web application to monitor and send email notification f
 
 ## Requirements
 
--   PHP 8.0 or latest
+-   PHP 8.3 or latest
 -   Node 16+ or latest
 
 ## How to run
