@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Type extends Model
 {
-    use HasFactory, CascadesDeletes;
+    use HasFactory, CascadeSoftDeletes;
 
     protected $fillable = [
         "name",
@@ -26,5 +26,4 @@ class Type extends Model
     {
         return $this->belongsTo(Classification::class);
     }
-
 }

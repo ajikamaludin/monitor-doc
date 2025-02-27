@@ -14,7 +14,7 @@ This is a project about web application to monitor and send email notification f
 ## Requirements
 
 -   PHP 8.3 or latest
--   Node 16+ or latest
+-   Node 20+ or latest
 
 ## How to run
 
@@ -43,9 +43,3 @@ $ npm run build
 
 ![](1.png?raw=true)
 ![](2.png?raw=true)
-
-## Rsync
-
-```bash
-rsync -arP -e 'ssh -p 222' --exclude=node_modules --exclude=.git --exclude=.env --exclude=storage --exclude=public/hot . pi@ajikamaludin.id:/home/pi/projects/monitor-doc
-```

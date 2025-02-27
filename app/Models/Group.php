@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Group extends Model
 {
-    use HasFactory, CascadesDeletes;
+    use HasFactory, CascadeSoftDeletes;
 
     protected $fillable = [
         "name"
@@ -16,7 +16,7 @@ class Group extends Model
 
     protected $cascadeDeletes = ['regions'];
 
-    public function regions() 
+    public function regions()
     {
         return $this->hasMany(Region::class);
     }
